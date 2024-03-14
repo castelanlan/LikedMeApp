@@ -1,70 +1,78 @@
-# Getting Started with Create React App
+# LikedMe
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este projeto é uma aplicação web construída com front-end em React e back-end em Flask. \
+O Flask expõe uma RESTful API.
 
-## Available Scripts
+## Tecnologias
+Frontend: React
+Backend: Flask (Python)
+API: RESTful (implementada com uma extensão Flask como Flask-RESTful)
 
-In the project directory, you can run:
+## Estrutura do Projeto
+```py
+app-liked-me/
+├── api/ # Diretório da API
+│   ├── .flaskenv
+│   └── api.py # Código API
+│
+├── public/
+│
+├── src/
+│   ├── App.css
+│   ├── App.js  # Código React
+│   └── ...     # Outros arquivos de front-end
+│
+├── .gitignore
+├── package-lock.json
+├── package.json
+├── React README.md
+├── README.md  # Este arquivo que você está lendo
+└── requirements.txt  #  Dependências python
+```
+## Primeiros passos
+**1. Pré-requisitos**
+- Node.js e npm.
+- Python 3 e pip.
 
-### `npm start`
+**2. Clone o repositório**
+```Bash
+git clone https://gitlab.lamoda.com.br/grupo-cobusiness-satc/frontend.git
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+cd frontend
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**3. Instale as dependências**
+- Frontend:
+```Bash
+npm install 
+```
+- Backend:
+```Bash
+py -m pip install -r requirements.txt
+```
 
-### `npm test`
+**4. Execute a aplicação** \
+São necessários dois terminais
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Backend:
+```Bash
+npm run start-api  # inicia o servidor de Flask na porta 5000
+```
 
-### `npm run build`
+- Frontend (desenvolvimento):
+```Bash
+npm run start  # inicia o servidor de React na porta 3000
+```
+Nota: React vai fazer um proxy para as chamadas de API, configurado em `package.json > proxy`. 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**5. Desenvolvimento**
+Alterações no código tanto front quanto back serão atualizadas automaticamente ao salvar um arquivo.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Documentação da API
+**Endpoints**
+- /.../..
+  - ...
+## Produção
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+--
