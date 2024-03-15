@@ -9,7 +9,7 @@ Backend: Flask (Python)
 API: RESTful (implementada com uma extensão Flask como Flask-RESTful)
 
 ## Estrutura do Projeto
-```py
+```bash
 app-liked-me/
 ├── api/ # Diretório da API
 │   ├── .flaskenv
