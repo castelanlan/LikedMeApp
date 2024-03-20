@@ -88,20 +88,30 @@ h1 {
 }
 
 .nav-link-item {
+  display: flex;
+  /* position: relative; */
+
   font-size: 20px;
+  font-family: Inter;
   font-weight: var(--bold);
 
   border-radius: .3em;
+  border: none;
+  background-color: #fff;
 
-  display: flex;
   min-width: 10em;
-  margin: .7em -.6em;
-  padding: .4em .4em;
+  margin: 1em 0;
+  padding: .5em;
+  transform: translateX(-.5em);
   transition: all .3s;
 }
 
 .nav-link-item:hover {
   background-color: #ddd;
+}
+
+.nav-link-item:active {
+  background-color: #ccc;
 }
 
 .nav-link-item p {
@@ -111,6 +121,19 @@ h1 {
 .nav-link-item-icon {
   height: 24px;
 }
+
+.active {
+  background-color: rgba(13, 224, 255, .15);
+  color: #0073C7;
+}
+/* 
+.nav-link-item.active {
+  position: relative;
+  content: "asd";
+  height: 1em;
+  max-width: 1em;
+  background-color: red;
+} */
 
 .main {
   flex-grow: 1;

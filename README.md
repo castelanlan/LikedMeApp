@@ -31,6 +31,7 @@ app-liked-me/
 ```
 ## Primeiros passos
 **1. Pré-requisitos**
+- Powershell / bash
 - Node.js e npm.
 - Python 3 e pip.
 
