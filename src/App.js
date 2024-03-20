@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 
@@ -100,15 +100,15 @@ function AcessoRapido(props) {
       <svg className="header-acesso-rapido-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
       {isDropdownOpen && props.children}
     </div>
-    );
+  );
 }
 
 function LinksAcessoRapido(props) {
   return (
-  <div className='header-acesso-rapido-links'>
-    <p>Gerar imagens</p>
-    <p>Cadastrar novo usuário</p>
-  </div>);
+    <div className='header-acesso-rapido-links'>
+      <p><a href='/'>Gerar imagens</a></p>
+      <p><a href='/'>Cadastrar novo usuário</a></p>
+    </div>);
 }
 
 function Usuario(props) {
@@ -116,23 +116,68 @@ function Usuario(props) {
 
   const handleOnClick = () => setIsDropdownOpen(!isDropdownOpen);
   return (
-  <div className='header-usuario' onClick={handleOnClick}>
-    <p>Hugo</p>
-    {isDropdownOpen && props.children}
-  </div>
+    <div className='header-usuario' onClick={handleOnClick}>
+      <p>Hugo</p>
+      {isDropdownOpen && props.children}
+    </div>
   );
 }
 
 function OpcoesUsuario(props) {
   return (
-  <div className='header-usuario-links'> 
-    <p><a href='/'>SAIR</a></p>
-  </div>
+    <div className='header-usuario-links'>
+      <p><a href='/'>SAIR</a></p>
+    </div>
   );
 }
 
 function Card(props) {
-  return (<div className='card'>Card: {props.children}</div>);
+  return (
+    <div className='card'>
+      <h2>Gerar imagem</h2>
+      <form className='card-form' action='/form'> 
+        <div className='card-marca-e-colecao'>
+          <div>
+            <label>
+              <p>Marca:</p>
+              <select id="marca" className='card-select'>
+                <option value="my">My Favorite Things</option>
+                <option value="lp">Lança Perfume</option>
+                <option value="am">Amarante do Brasil</option>
+              </select>
+            </label>
+          </div>
+          <div>
+            <label id="lbl-colecao">
+              <p>Coleção:</p>
+              <select id="colecao" className='card-select'>
+                <option value="my24">MY24</option>
+                <option value="my23">MY23</option>
+                <option value="lp24">LP24</option>
+                <option value="lp23">LP23</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div className='card-descricao'>
+          <label>
+            <p>Descrição do produto:</p>
+            <input type='textarea' id='descricao' placeholder='Insira aqui a descrição do produto'/>
+          </label>
+        </div>
+        <div className='card-upload'>
+          <label>
+            <p>Upload do esboço</p>
+            <input type='file' />
+          </label>
+        </div>
+        <div className='card-submit'>
+          <input className='card-submit-button' type="submit" value="Gerar imagem" />
+          <p>Créditos restantes: R$50.000</p>
+        </div>
+      </form>
+    </div>
+  );
 }
 
 function App() {

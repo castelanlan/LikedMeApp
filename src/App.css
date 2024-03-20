@@ -199,7 +199,6 @@ h1 {
   border-radius: .3em;
   border: 1px solid #d1d1d1;
   box-shadow: var(--shadow);
-
 }
 
 .header-usuario-links > p {
@@ -208,11 +207,150 @@ h1 {
   font-weight: var(--regular);
 }
 
-.header-usuario-links a {
+.header-usuario-links a, .header-acesso-rapido-links a {
   text-decoration: none;
   color: #6D6D6D;
 }
 
 .card {
+  --less-shadow: 0 0 4px 1px rgba(0 0 0 / .1);
+
   max-width: 50em;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em 3em 3em 3em;
+}
+
+.card > h2 {
+  font-weight: var(--bold);
+  font-size: 48px;
+  margin-bottom: .5em;
+}
+
+.card label > p {
+  font-size: 20px;
+  font-weight: var(--bold);
+}
+
+.card-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-marca-e-colecao {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: .7em;
+}
+
+.card-marca-e-colecao > div {
+  flex-grow: 1;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+}
+
+label > p {
+  margin-bottom: .6em;
+}
+
+.card-select {
+  margin-bottom: 1em;
+  padding: .5em 4em .5em .5em;
+  justify-content: left;
+  border-radius: .3em;
+  border: 1px solid rgba(0 0 0 / .15);
+  color: rgba(0 0 0 / .15);
+  font-weight: var(--medium);
+  font-family: Inter;
+  /* font-size: 10px; */
+  background-color: #f6f6f6;
+  box-shadow: var(--less-shadow);
+  /* text-align-last: center; */
+}
+
+#lbl-colecao {
+  margin-left: 1em;
+}
+
+.card-descricao {
+  margin-bottom: 2em;
+}
+
+.card-descricao input {
+  padding: .5em;
+  background-color: #f6f6f6;
+  border: 1px solid rgba(0 0 0 / .15);
+  border-radius: .3em;
+  box-shadow: var(--less-shadow);
+  color: rgba(0 0 0 / .15);
+}
+
+.card-descricao input:focus, .card-select:focus {
+  color: #000;
+}
+
+.card-upload {
+  margin-bottom: 1em;
+}
+
+.card-upload input {
+  /* background-color: red; */
+  font-family: Inter;
+  border: 2px solid rgba(255 255 255 / .2);
+  margin-bottom: calc(2em + 2px); 
+  
+  background: rgba(0,0,0,.025);
+  padding: 1.5em 1em 1.5em 1em;
+  display: block;
+  border: 1px dashed grey;
+  outline: none;
+
+  border-radius: .5em;
+}
+
+.card-upload input::file-selector-button{
+  font-family: Inter;
+  background: #2E29FF;
+  border: 0;
+  border-radius: .5em;
+  appearance: none;
+  padding: .5rem;
+  /* border-radius: var(--b-radius); */
+  color: #fff;
+  margin-right: 1em;
+  outline: none;
+  cursor: pointer;
+}
+
+.card-upload input::file-selector-button:hover {
+  filter: var(--filter);
+}
+
+.card-upload input:hover {
+  border: 1px dashed #2E29FF
+}
+
+.card-submit {
+  display:flex;
+  flex-direction: row;
+  justify-content:flex-start;
+  align-items: center;
+}
+
+.card-submit-button {
+  padding: 1.5em 2em;
+  color: #fff;
+  background-color: #2E29FF;
+  border: none;
+  border-radius: .5em;
+  font-family: Inter;
+  font-weight: var(--bold);
+}
+
+.card-submit p {
+  color: rgba(0 0 0 / .25);
+  margin-left: 1em;
 }
