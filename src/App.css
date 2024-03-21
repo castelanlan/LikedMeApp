@@ -296,11 +296,15 @@ label > p {
   margin-bottom: 1em;
 }
 
+.card-upload label {
+  margin-bottom: .5em;
+}
+
 .card-upload input {
   /* background-color: red; */
   font-family: Inter;
   border: 2px solid rgba(255 255 255 / .2);
-  margin-bottom: calc(2em + 2px); 
+  /* margin-bottom: calc(2em + 2px);  */
   
   background: rgba(0,0,0,.025);
   padding: 1.5em 1em 1.5em 1em;
