@@ -14,3 +14,15 @@ def form():
     ic(request.form)
 
     return ("<h1>Sucesso</h1>")
+
+@app.route('/users', methods=["GET"])
+def users():
+    data = [
+        {'nome': 'Gabriel Castelan',
+         'login': 'gabriel.castelan',
+         'permissão': 48000},
+        {'nome': 'Alexandre Buratto',
+         'login': 'xande.buratto',
+         'permissão': 48000}
+    ]
+    return data

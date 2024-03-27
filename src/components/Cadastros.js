@@ -1,65 +1,90 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
 
 import './cadastros.css'
 
 function TabelaUser() {
+  const [users, setUsers] = useState(null);
+
+  useEffect(() => {
+    fetch("/users").then((response) => response.json()).then((data) => {setUsers(data); console.log(data)}).catch((error) => console.log(error))
+  }, []);
+
+
   // const usuarios = 
   return (<div>
     <div className="tbl-user-wrapper">
+      {/* {users && <div>{JSON.stringify(users)}</div>} */}
       <table>
         <thead>
           <tr>
-            <th style={{'width': '15%'}}>Nome</th>
+            <th style={{'width': '15%'}} className="tbl-first-col">Nome</th>
             <th style={{'width': '15%'}}>Login</th>
-            <th style={{'width': '5%'}} className="tbl-user-center">Estilista</th>
-            <th style={{'width': '5%'}} className="tbl-user-center">Avaliador</th>
-            <th style={{'width': '5%'}} className="tbl-user-center">Admin</th>
-            <th style={{'width': '55%'}}>Ações</th>
+            <th style={{'width': '10%'}} className="tbl-user-center">Estilista</th>
+            <th style={{'width': '10%'}} className="tbl-user-center">Avaliador</th>
+            <th style={{'width': '10%'}} className="tbl-user-center">Admin</th>
+            <th style={{'width': '40%'}} className="tbl-user-right">Ações</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Gabriel Castelan</td>
+            <td className="tbl-first-col">Gabriel Castelan</td>
             <td>gabriel.castelan</td>
             <td className="tbl-user-center">Não</td>
             <td className="tbl-user-center">Sim</td>
             <td className="tbl-user-center">Sim</td>
-            <td>Histórico Permissões</td>
+            <td className="tbl-user-right">Histórico Permissões</td>
           </tr>
           <tr>
-            <td>Alexandre Buratto</td>
+            <td className="tbl-first-col">Alexandre Buratto</td>
             <td>xande.buratto</td>
             <td className="tbl-user-center">Sim</td>
             <td className="tbl-user-center">Não</td>
             <td className="tbl-user-center">Sim</td>
-            <td>Histórico Permissões</td>
+            <td className="tbl-user-right">Histórico Permissões</td>
           </tr>
-          <tr>
-            <td>Jhayne Ketleen</td>
-            <td>jhayne.ketleen</td>
-            <td className="tbl-user-center">Sim</td>
-            <td className="tbl-user-center">Não</td>
-            <td className="tbl-user-center">Sim</td>
-            <td>Histórico Permissões</td>
-          </tr>
-          <tr>
-            <td>Linus</td>
-            <td>xande.buratto</td>
-            <td className="tbl-user-center">Sim</td>
-            <td className="tbl-user-center">Não</td>
-            <td className="tbl-user-center">Sim</td>
-            <td>Histórico Permissões</td>
-          </tr>
-          <tr>
-            <td>Admin</td>
-            <td>xande.buratto</td>
-            <td className="tbl-user-center">Sim</td>
-            <td className="tbl-user-center">Não</td>
-            <td className="tbl-user-center">Sim</td>
-            <td>Histórico Permissões</td>
-          </tr>
+          {users && users.length > 0 ? (
+              users.map((user, index) => (
+                <tr key={index}>
+                  <td className="tbl-first-col">{user.nome}</td>
+                  <td>{user.login}</td>
+                  <td className="tbl-user-center">
+                    {/* Replace with logic to determine "Sim" or "Não" based on user data */}
+                    {user.permissão > 1 /* condition for Estilista */ ? (
+                      "Sim"
+                    ) : (
+                      "Não"
+                    )}
+                  </td>
+                  <td className="tbl-user-center">
+                    {/* Replace with logic to determine "Sim" or "Não" based on user data */}
+                    {user.permissão > 9 /* condition for Avaliador */ ? (
+                      "Sim"
+                    ) : (
+                      "Não"
+                    )}
+                  </td>
+                  <td className="tbl-user-center">
+                    {/* Replace with logic to determine "Sim" or "Não" based on user data */}
+                    {user.permissão > 99 /* condition for Admin */ ? (
+                      "Sim"
+                    ) : (
+                      "Não"
+                    )}
+                  </td>
+                  <td className="tbl-user-right">Histórico Permissões</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="tbl-user-center">
+                  {/* Message to display when no users are found */}
+                  Nenhum usuário encontrado
+                </td>
+              </tr>
+            )}
           <tr id="tbl-ultimo-tr">
-            <td>...</td>
+            <td className="tbl-first-col">...</td>
             <td></td>
             <td></td>
             <td></td>
