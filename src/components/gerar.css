@@ -8,7 +8,7 @@
     padding: 1.5em 3em 3em 3em;
   }
   
-  .card > h2 {
+  .card h2 {
     font-weight: var(--bold);
     font-size: 48px;
     margin-bottom: .5em;

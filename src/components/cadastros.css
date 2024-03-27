@@ -1,11 +1,51 @@
 .card-cadastros {
-    flex-direction: row;
-    align-items: baseline;
+  flex-direction: row;
+  max-width: unset;
 }
 
-.card-cadastros > p {
-    filter: opacity(25%);
-    font-weight: var(--medium);
-    font-size: 16px;
-    margin-left: 1em;
+.card-cadastros p, .cdstro > form > input {
+  color: rgba(0 0 0 / .25);
+  font-weight: var(--medium);
+  font-size: 16px;
+  margin-left: 1em;
+  font-family: Inter;
+}
+
+.cdstro-header,
+.cdstro-usuario {
+  display: flex;
+  flex-direction: row;
+}
+
+.cdstro-header {
+  flex-grow: 1;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.cdstro-usuario {
+  align-items: baseline;
+}
+
+.cdstro-usuario-icon {
+  height: 24px;
+}
+
+.cdstro > form {
+  color: rgba(0 0 0 / .25);
+  display: flex;
+}
+
+.cdstro > form > input {
+  border: none;
+  text-align: end;
+  padding: 0 1em 0 10em;
+}
+
+.cdstro > form > input:focus-visible {
+  outline: none;
+}
+
+.cdstro > form > input::placeholder {
+  color: rgba(0 0 0 / .25);
 }
