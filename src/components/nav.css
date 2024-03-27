@@ -53,6 +53,7 @@
 
 .nav-link-item p {
   margin-left: 1em;
+  white-space: nowrap;
 }
 
 .nav-link-item-icon {
