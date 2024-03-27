@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import './nav.css'
+
 function Title() {
   return (
     <h1 className='title'><span style={{ color: 'red' }}>L</span>iked<span style={{ color: 'red' }}>M</span>e</h1>

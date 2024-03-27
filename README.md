@@ -9,6 +9,7 @@ Backend: Flask (Python)
 API: RESTful (implementada com uma extensão Flask como Flask-RESTful)
 
 ## Estrutura do Projeto
+O app é uma [single page application](https://blog.pshrmn.com/how-single-page-applications-work/), cada "página" seria um componente do React diferente renderizado
 ```bash
 app-liked-me/
 ├── api/ # Diretório da API
@@ -18,9 +19,16 @@ app-liked-me/
 ├── public/
 │
 ├── src/
-│   ├── App.css
-│   ├── App.js  # Código React
-│   └── ...     # Outros arquivos de front-end
+│   ├── components/ # componentes
+│   │   ├── acessos.css # estilos do componente (página) Acessos
+│   │   ├── Acessos.js # componente Acessos
+│   │   ├── adm-imagens.css
+│   │   ├── AdmImagens.js
+│   │   └── ...
+│   │   
+│   ├── App.css # estilos gerais do app
+│   ├── App.js  # Código principal, rotas do React router
+│   └── ...
 │
 ├── .gitignore
 ├── package-lock.json

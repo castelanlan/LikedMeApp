@@ -2,6 +2,8 @@ import React from "react";
 import fileTypeChecker from "file-type-checker";
 import { useForm } from 'react-hook-form';
 
+import './gerar.css'
+
 function Gerar(props) {
 
   const handleFileInputChange = (event) => {
