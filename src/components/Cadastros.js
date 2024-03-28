@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
-
-
 import './cadastros.css'
+
+import X from '../assets/X.png';
+import V from '../assets/V.png';
+
+const PERMISSOES = {
+  'estilista': 16384,
+  'avaliador': 32768,
+  'admin': 65536, 
+};
 
 function TabelaUser() {
   const [users, setUsers] = useState(null);
@@ -20,56 +27,35 @@ function TabelaUser() {
           <tr>
             <th style={{'width': '15%'}} className="tbl-first-col">Nome</th>
             <th style={{'width': '15%'}}>Login</th>
+            <th style={{'width': '10%'}} className="tbl-user-center">Admin</th>
             <th style={{'width': '10%'}} className="tbl-user-center">Estilista</th>
             <th style={{'width': '10%'}} className="tbl-user-center">Avaliador</th>
-            <th style={{'width': '10%'}} className="tbl-user-center">Admin</th>
             <th style={{'width': '40%'}} className="tbl-user-right">Ações</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="tbl-first-col">Gabriel Castelan</td>
-            <td>gabriel.castelan</td>
-            <td className="tbl-user-center">Não</td>
-            <td className="tbl-user-center">Sim</td>
-            <td className="tbl-user-center">Sim</td>
-            <td className="tbl-user-right">Histórico Permissões</td>
-          </tr>
-          <tr>
-            <td className="tbl-first-col">Alexandre Buratto</td>
-            <td>xande.buratto</td>
-            <td className="tbl-user-center">Sim</td>
-            <td className="tbl-user-center">Não</td>
-            <td className="tbl-user-center">Sim</td>
-            <td className="tbl-user-right">Histórico Permissões</td>
-          </tr>
           {users && users.length > 0 ? (
               users.map((user, index) => (
                 <tr key={index}>
                   <td className="tbl-first-col">{user.nome}</td>
                   <td>{user.login}</td>
                   <td className="tbl-user-center">
-                    {/* Replace with logic to determine "Sim" or "Não" based on user data */}
-                    {user.permissão > 1 /* condition for Estilista */ ? (
-                      "Sim"
+                    {user.permissão & PERMISSOES.admin /* condition for Admin */ ? 
+                    (<img src={V} height="16" alt="Ícone de verificado" />) : 
+                    (<img src={X} height="16" alt="Ícone de proibido"/>)}
+                  </td>
+                  <td className="tbl-user-center">
+                    {user.permissão & PERMISSOES.estilista /* condition for Estilista */ ? (
+                      <img src={V} height="16" alt="Ícone de verificado" />
                     ) : (
-                      "Não"
+                      <img src={X} height="16" alt="Ícone de proibido"/>
                     )}
                   </td>
                   <td className="tbl-user-center">
-                    {/* Replace with logic to determine "Sim" or "Não" based on user data */}
-                    {user.permissão > 9 /* condition for Avaliador */ ? (
-                      "Sim"
+                    {user.permissão & PERMISSOES.avaliador /* condition for Avaliador */ ? (
+                      <img src={V} height="16" alt="Ícone de verificado" />
                     ) : (
-                      "Não"
-                    )}
-                  </td>
-                  <td className="tbl-user-center">
-                    {/* Replace with logic to determine "Sim" or "Não" based on user data */}
-                    {user.permissão > 99 /* condition for Admin */ ? (
-                      "Sim"
-                    ) : (
-                      "Não"
+                      <img src={X} height="16" alt="Ícone de proibido"/>
                     )}
                   </td>
                   <td className="tbl-user-right">Histórico Permissões</td>
