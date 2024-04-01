@@ -18,16 +18,16 @@ function Main(props) {
 }
 
 function Content() {
-  return(
+  return (
     <main>
       <Routes>
-        <Route path='/acessos' element={<Acessos/>} exact />
-        <Route path='/cadastros' element={<Cadastros/>} exact />
-        <Route path='/adm-imagens' element={<AdmImagens/>} exact />
-        <Route path='/segurança' element={<Segurança/>} exact />
-        <Route path='/carga' element={<Gerar/>} exact />
-        <Route path='/treinamento' element={<Treinamento/>} exact />
-        <Route path='/tendencias' element={<Tendencias/>} exact />
+        <Route path='/acessos' element={<Acessos />} exact />
+        <Route path='/cadastros' element={<Cadastros />} exact />
+        <Route path='/adm-imagens' element={<AdmImagens />} exact />
+        <Route path='/segurança' element={<Segurança />} exact />
+        <Route path='/carga' element={<Gerar />} exact />
+        <Route path='/treinamento' element={<Treinamento />} exact />
+        <Route path='/tendencias' element={<Tendencias />} exact />
       </Routes>
     </main>
   );

@@ -104,7 +104,7 @@ function Gerar(props) {
           <div className='card-upload'>
             <label>
               <p>Upload do esboço</p>
-              <Controller 
+              <Controller
                 name="arquivo"
                 control={control}
                 defaultValue={"sem-arquivo"}
@@ -114,8 +114,9 @@ function Gerar(props) {
                       {...field}
                       value={value?.fileName}
                       onChange={
-                        event => { onChange(event.target.files[0]) 
-                      }}
+                        event => {
+                          onChange(event.target.files[0])
+                        }}
                       {...register('arquivo', { required: true, type: 'file' })} />
                   );
                 }}
@@ -130,13 +131,15 @@ function Gerar(props) {
           </div>
         </form>
       </div>
-      {responseData && 
+      {responseData &&
         <div className="card card-result">
           {/* <p>{responseData}</p> */}
           {/* <p>{responseData[0]}</p> */}
-          <img className="card-result-img" src={`data:image/jpeg;base64,${responseData.imagem}`}/>
-          <p>{responseData.marca}</p>
-          <p>{responseData.colecao}</p>
+          <img className="card-result-img" src={`data:image/jpeg;base64,${responseData.imagem}`} />
+          <div>
+            <p>{responseData.marca}</p>
+            <p>{responseData.colecao}</p>
+          </div>
           <p>{responseData.descricao}</p>
           {/* <p>{responseData.imagem}</p> */}
         </div>}

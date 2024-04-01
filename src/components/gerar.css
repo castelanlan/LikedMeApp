@@ -2,7 +2,7 @@
 /* display: unset; */
 /* } */
 
-main > div {
+main>div {
   background-color: pink;
   max-width: 100%;
   display: flex;

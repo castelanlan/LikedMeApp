@@ -7,14 +7,14 @@ import V from '../assets/V.png';
 const PERMISSOES = {
   'estilista': 16384,
   'avaliador': 32768,
-  'admin': 65536, 
+  'admin': 65536,
 };
 
 function TabelaUser() {
   const [users, setUsers] = useState(null);
 
   useEffect(() => {
-    fetch("/users").then((response) => response.json()).then((data) => {setUsers(data); console.log(data)}).catch((error) => console.log(error))
+    fetch("/users").then((response) => response.json()).then((data) => { setUsers(data); console.log(data) }).catch((error) => console.log(error))
   }, []);
 
 
@@ -25,50 +25,50 @@ function TabelaUser() {
       <table>
         <thead>
           <tr>
-            <th style={{'width': '15%'}} className="tbl-first-col">Nome</th>
-            <th style={{'width': '15%'}}>Login</th>
-            <th style={{'width': '10%'}} className="tbl-user-center">Admin</th>
-            <th style={{'width': '10%'}} className="tbl-user-center">Estilista</th>
-            <th style={{'width': '10%'}} className="tbl-user-center">Avaliador</th>
-            <th style={{'width': '40%'}} className="tbl-user-right">Ações</th>
+            <th style={{ 'width': '15%' }} className="tbl-first-col">Nome</th>
+            <th style={{ 'width': '15%' }}>Login</th>
+            <th style={{ 'width': '10%' }} className="tbl-user-center">Admin</th>
+            <th style={{ 'width': '10%' }} className="tbl-user-center">Estilista</th>
+            <th style={{ 'width': '10%' }} className="tbl-user-center">Avaliador</th>
+            <th style={{ 'width': '40%' }} className="tbl-user-right">Ações</th>
           </tr>
         </thead>
         <tbody>
           {users && users.length > 0 ? (
-              users.map((user, index) => (
-                <tr key={index}>
-                  <td className="tbl-first-col">{user.nome}</td>
-                  <td>{user.login}</td>
-                  <td className="tbl-user-center">
-                    {user.permissão & PERMISSOES.admin /* condition for Admin */ ? 
-                    (<img src={V} height="16" alt="Ícone de verificado" />) : 
-                    (<img src={X} height="16" alt="Ícone de proibido"/>)}
-                  </td>
-                  <td className="tbl-user-center">
-                    {user.permissão & PERMISSOES.estilista /* condition for Estilista */ ? (
-                      <img src={V} height="16" alt="Ícone de verificado" />
-                    ) : (
-                      <img src={X} height="16" alt="Ícone de proibido"/>
-                    )}
-                  </td>
-                  <td className="tbl-user-center">
-                    {user.permissão & PERMISSOES.avaliador /* condition for Avaliador */ ? (
-                      <img src={V} height="16" alt="Ícone de verificado" />
-                    ) : (
-                      <img src={X} height="16" alt="Ícone de proibido"/>
-                    )}
-                  </td>
-                  <td className="tbl-user-right">Histórico Permissões</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" className="tbl-user-center">
-                  {/* Message to display when no users are found */}
-                  Nenhum usuário encontrado
+            users.map((user, index) => (
+              <tr key={index}>
+                <td className="tbl-first-col">{user.nome}</td>
+                <td>{user.login}</td>
+                <td className="tbl-user-center">
+                  {user.permissão & PERMISSOES.admin /* condition for Admin */ ?
+                    (<img src={V} height="16" alt="Ícone de verificado" />) :
+                    (<img src={X} height="16" alt="Ícone de proibido" />)}
                 </td>
+                <td className="tbl-user-center">
+                  {user.permissão & PERMISSOES.estilista /* condition for Estilista */ ? (
+                    <img src={V} height="16" alt="Ícone de verificado" />
+                  ) : (
+                    <img src={X} height="16" alt="Ícone de proibido" />
+                  )}
+                </td>
+                <td className="tbl-user-center">
+                  {user.permissão & PERMISSOES.avaliador /* condition for Avaliador */ ? (
+                    <img src={V} height="16" alt="Ícone de verificado" />
+                  ) : (
+                    <img src={X} height="16" alt="Ícone de proibido" />
+                  )}
+                </td>
+                <td className="tbl-user-right">Histórico Permissões</td>
               </tr>
-            )}
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" className="tbl-user-center">
+                {/* Message to display when no users are found */}
+                Nenhum usuário encontrado
+              </td>
+            </tr>
+          )}
           <tr id="tbl-ultimo-tr">
             <td className="tbl-first-col">...</td>
             <td></td>

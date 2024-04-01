@@ -2,7 +2,8 @@
   max-width: unset;
 }
 
-.card-cadastros p, .cdstro > form > input {
+.card-cadastros p,
+.cdstro>form>input {
   color: rgba(0 0 0 / .25);
   font-weight: var(--medium);
   font-size: 16px;
@@ -30,22 +31,22 @@
   height: 24px;
 }
 
-.cdstro > form {
+.cdstro>form {
   color: rgba(0 0 0 / .25);
   display: flex;
 }
 
-.cdstro > form > input {
+.cdstro>form>input {
   border: none;
   text-align: end;
   padding: 0 1em 0 10em;
 }
 
-.cdstro > form > input:focus-visible {
+.cdstro>form>input:focus-visible {
   outline: none;
 }
 
-.cdstro > form > input::placeholder {
+.cdstro>form>input::placeholder {
   color: rgba(0 0 0 / .25);
 }
 
@@ -64,7 +65,8 @@ thead {
   padding-left: 3rem;
 }
 
-th, td {
+th,
+td {
   padding-left: 3rem;
   white-space: nowrap;
   overflow: hidden;
@@ -98,7 +100,7 @@ tr:nth-child(even) {
   text-align: center;
 }
 
-.tbl-user-center > img {
+.tbl-user-center>img {
   transform: translateY(2px);
 }
 

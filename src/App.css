@@ -37,10 +37,11 @@ h1 {
 
 .main {
   flex-grow: 1;
-  background-image: linear-gradient(135deg, rgba(0,240,255,1) 0%, rgba(0,87,255,1) 100%);;
+  background-image: linear-gradient(135deg, rgba(0, 240, 255, 1) 0%, rgba(0, 87, 255, 1) 100%);
 }
 
-.header, .card {
+.header,
+.card {
   background-color: #fff;
   box-shadow: var(--shadow);
   padding: 1.5em;
@@ -61,8 +62,12 @@ h1 {
 
   font-weight: var(--bold);
 }
-.header-acesso-rapido > p { transition: all .3s;}
-.header-acesso-rapido > p:hover {
+
+.header-acesso-rapido>p {
+  transition: all .3s;
+}
+
+.header-acesso-rapido>p:hover {
   transform: scale(1.05);
 }
 
@@ -81,7 +86,7 @@ h1 {
   display: flex;
 }
 
-.header-acesso-rapido-links > p{
+.header-acesso-rapido-links>p {
   margin-left: 1em;
 }
 
@@ -94,20 +99,21 @@ h1 {
   position: absolute;
   top: 1.6em;
   right: 0;
-  
+
   background-color: #fff;
   border-radius: .3em;
   border: 1px solid #d1d1d1;
   box-shadow: var(--shadow);
 }
 
-.header-usuario-links > p {
+.header-usuario-links>p {
   padding: .3em;
   margin-right: 4.7em;
   font-weight: var(--regular);
 }
 
-.header-usuario-links a, .header-acesso-rapido-links a {
+.header-usuario-links a,
+.header-acesso-rapido-links a {
   text-decoration: none;
   color: #6D6D6D;
 }
