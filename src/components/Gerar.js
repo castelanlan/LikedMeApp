@@ -1,28 +1,29 @@
 import React from "react";
-import fileTypeChecker from "file-type-checker";
+// import fileTypeChecker from "file-type-checker";
 import { Controller, useForm } from 'react-hook-form';
 import { useState } from "react";
+import { useEffect } from "react";
 
 import './gerar.css'
 
 function Gerar(props) {
 
-  const handleFileInputChange = (event) => {
-    try {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const types = ["jpeg", "png", "gif"];
+  // const handleFileInputChange = (event) => {
+  //   try {
+  //     const file = event.target.files[0];
+  //     const reader = new FileReader();
+  //     const types = ["jpeg", "png", "gif"];
 
-      reader.onload = () => {
-        const isImage = fileTypeChecker.validateFileType(reader.result, types);
-        console.log(isImage); // Returns true if the file is an image from the accepted list
-      };
+  //     reader.onload = () => {
+  //       const isImage = fileTypeChecker.validateFileType(reader.result, types);
+  //       console.log(isImage); // Returns true if the file is an image from the accepted list
+  //     };
 
-      reader.readAsArrayBuffer(file);
-    } catch (err) {
-      console.error("Error: ", err.message);
-    }
-  };
+  //     reader.readAsArrayBuffer(file);
+  //   } catch (err) {
+  //     console.error("Error: ", err.message);
+  //   }
+  // };
 
   const [responseData, setResponseData] = useState(null);
   const { control, register, handleSubmit, formState: { errors } } = useForm();
@@ -45,15 +46,18 @@ function Gerar(props) {
       method: 'POST',
       body: formData,
     })
-      .then((response) => {
-        response = response.json();
-        setResponseData(response)
-        console.log(response)
-      })
-      .catch((error) => {
-        // Handle request errors
+      .then((response) => response.json()).then((data) => setResponseData(data)).
+      catch((error) => {// Handle request errors
       });
   };
+
+  useEffect(() => {
+    if (responseData) {
+      console.log(responseData); // Optional: log the response data
+      setResponseData(responseData)
+    }
+  }, [responseData]);
+
   return (
     <div>
       <div className='card'>
@@ -100,7 +104,8 @@ function Gerar(props) {
           <div className='card-upload'>
             <label>
               <p>Upload do esboço</p>
-              <Controller name="arquivo"
+              <Controller 
+                name="arquivo"
                 control={control}
                 defaultValue={"sem-arquivo"}
                 render={({ field: { value, onChange, ...field } }) => {
@@ -125,7 +130,16 @@ function Gerar(props) {
           </div>
         </form>
       </div>
-      {responseData && <div className="card">Resposta!!</div>}
+      {responseData && 
+        <div className="card card-result">
+          {/* <p>{responseData}</p> */}
+          {/* <p>{responseData[0]}</p> */}
+          <img className="card-result-img" src={`data:image/jpeg;base64,${responseData.imagem}`}/>
+          <p>{responseData.marca}</p>
+          <p>{responseData.colecao}</p>
+          <p>{responseData.descricao}</p>
+          {/* <p>{responseData.imagem}</p> */}
+        </div>}
     </div>
   );
 }

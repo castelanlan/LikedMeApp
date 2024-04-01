@@ -2,6 +2,7 @@
 from flask import Flask, request, Response
 import json
 from icecream import ic
+import base64 as b64
 
 app = Flask(__name__)
 
@@ -30,21 +31,23 @@ def form():
     if request.method == "GET":
         return Response(response="Invalid method.", status=500)
     
+    # __import__('time').sleep(2)
+    
     # ic(request)
-    ic(request.files)
-    # ic(request.form)
+    file_data = b64.b64encode(request.files["arquivo"].read()).decode("utf-8")
+    # ic(file_data)
 
     r = dict(request.form)
-    ic(r)
+    r['imagem'] = file_data
 
     response = Response(
-        response=json.dumps(request.form),
+        response=json.dumps(r),
         status=200,
         headers=dict(request.headers),
         mimetype='application/json'
     )
 
-    ic(response)
+    # ic(response)
     return response
 
 @app.route('/users', methods=["GET"])
