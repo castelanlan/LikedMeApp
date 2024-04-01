@@ -1,5 +1,6 @@
 # from datetime import datetime
-from flask import Flask, request
+from flask import Flask, request, Response
+import json
 from icecream import ic
 
 app = Flask(__name__)
@@ -27,13 +28,24 @@ PERMISSOES = {
 @app.route('/form', methods=["GET", "POST"])
 def form():
     if request.method == "GET":
-        return("<h1>apenas POST </h1>")
+        return Response(response="Invalid method.", status=500)
     
-    ic(request)
+    # ic(request)
     ic(request.files)
-    ic(request.form)
+    # ic(request.form)
 
-    return ("<h1>Sucesso</h1>")
+    r = dict(request.form)
+    ic(r)
+
+    response = Response(
+        response=json.dumps(request.form),
+        status=200,
+        headers=dict(request.headers),
+        mimetype='application/json'
+    )
+
+    ic(response)
+    return response
 
 @app.route('/users', methods=["GET"])
 def users():

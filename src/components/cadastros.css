@@ -87,7 +87,7 @@ td {
 }
 
 tr:nth-child(even) {
-  background-color: rgba(0 0 0 / .1);
+  background-color: #f9f9f9;
 }
 
 #tbl-ultimo-tr {
@@ -105,4 +105,8 @@ tr:nth-child(even) {
 .tbl-user-right {
   text-align: right;
   padding-right: 3rem;
+}
+
+tr:hover {
+  background-color: rgba(100 227 255 / .25);
 }
