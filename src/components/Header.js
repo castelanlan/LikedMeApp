@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { Link } from 'react-router-dom';
 
 function AcessoRapido(props) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -19,9 +20,10 @@ function AcessoRapido(props) {
 function LinksAcessoRapido(props) {
   return (
     <div className='header-acesso-rapido-links'>
-      <p><a href='/'>Gerar imagens</a></p>
-      <p><a href='/'>Cadastrar novo usuário</a></p>
-    </div>);
+      <p><Link to='/carga'>Gerar imagens</Link></p>
+      <p><Link to='/cadastros'>Cadastrar novo usuário</Link></p>
+    </div>
+  );
 }
 
 function Usuario(props) {

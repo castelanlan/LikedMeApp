@@ -1,5 +1,5 @@
 .card-cadastros {
-  max-width: unset;
+  width: 100%;
 }
 
 .card-cadastros p,
@@ -88,6 +88,12 @@ td {
   padding: .3em 0 .3em 0;
 }
 
+td a {
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 1em;
+}
+
 tr:nth-child(even) {
   background-color: #f9f9f9;
 }
@@ -111,4 +117,14 @@ tr:nth-child(even) {
 
 tr:hover {
   background-color: rgba(100 227 255 / .25);
+}
+
+.card-user-header {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.card-cadastros-user > p {
+  margin: 0;
 }

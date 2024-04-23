@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,14 +20,9 @@ function NavLinkSectionTitle(props) {
   return (<div className='nav-link-section-title'>{props.children}</div>)
 }
 
-// function button(props) {
-// return (<button className='nav{-link-item ' + ()}>{props.children} </button>)
-// }
-
 function NavDropDown(props) {
   return (<div>{props.children} </div>)
 }
-
 
 function Nav(props) {
   const [active, setActive] = useState('');
@@ -38,6 +33,7 @@ function Nav(props) {
     setActive(path)
     navigate(path)
   }
+
   return (
     <div className='nav'>
       <Title />
@@ -72,7 +68,6 @@ function Nav(props) {
           </button>
         </Link>
 
-
       </NavLinkSection>
       <NavLinkSection>
         <NavLinkSectionTitle>UPLOAD</NavLinkSectionTitle>
@@ -101,7 +96,8 @@ function Nav(props) {
         </NavDropDown>
       </NavLinkSection>
       {props.children}
-    </div>)
+    </div>
+  );
 }
 
 export default Nav

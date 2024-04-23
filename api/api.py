@@ -26,6 +26,54 @@ PERMISSOES = {
     'admin': 65536, 
 }
 
+users_data = [
+    {'nome': 'Gabriel Castelan',
+    'login': 'gabriel.castelan',
+    'permissão': PERMISSOES['admin']},
+    {'nome': 'Alexandre Buratto',
+    'login': 'xande.buratto',
+    'permissão': PERMISSOES['admin'] | PERMISSOES['avaliador']},
+    {'nome': 'Sofia Oliveira',
+    'login': 'sofia.oliveira',
+    'permissão': PERMISSOES['estilista']},
+    {'nome': 'Miguel Santos',
+    'login': 'miguel.santos',
+    'permissão': 0},  # No permissions
+    {'nome': 'Beatriz Almeida',
+    'login': 'beatriz.almeida',
+    'permissão': PERMISSOES['avaliador']},
+    {'nome': 'Carolina Lima',
+    'login': 'carolina.lima',
+    'permissão': PERMISSOES['estilista'] | PERMISSOES['avaliador']},  # Estilista and avaliador
+    {'nome': 'Daniel Rocha',
+    'login': 'daniel.rocha',
+    'permissão': PERMISSOES['admin'] & ~PERMISSOES['avaliador']},  # Admin but not avaliador (use bitwise AND and NOT)
+    {'nome': 'Eduardo Silva',
+    'login': 'eduardo.silva',
+    'permissão': 3},  # Combination not defined in dictionary (use integer value directly)
+    {'nome': 'Gabriel Castelan',
+    'login': 'gabriel.castelan',
+    'permissão': PERMISSOES['gerar_imagens'] | PERMISSOES['visualizar_imagens']},
+    {'nome': 'Sofia Oliveira',
+    'login': 'sofia.oliveira',
+    'permissão': PERMISSOES['deletar_imagens'] | PERMISSOES['alterar_imagens']},
+    {'nome': 'João Fernandes',
+    'login': 'joao.fernandes',
+    'permissão': PERMISSOES['cadastrar_usuario'] | PERMISSOES['consultar_usuario']},
+    {'nome': 'Mariana Costa',
+    'login': 'mariana.costa',
+    'permissão': PERMISSOES['deletar_usuario'] | PERMISSOES['editar_permissoes_usuario']},
+    {'nome': 'Eduardo Silva',
+    'login': 'eduardo.silva',
+    'permissão': PERMISSOES['consultar_historico'] | PERMISSOES['exportar_historico']},
+    {'nome': 'Lara Silva',
+    'login': 'lara.silva',
+    'permissão': PERMISSOES['adicionar_a_galeria'] | PERMISSOES['deletar_da_galeria']},
+    {'nome': 'Beatriz Almeida',
+    'login': 'beatriz.almeida',
+    'permissão': PERMISSOES['visualizar_galeria'] | PERMISSOES['download_galeria']},
+]
+
 @app.route('/form', methods=["GET", "POST"])
 def form():
     if request.method == "GET":
@@ -52,52 +100,13 @@ def form():
 
 @app.route('/users', methods=["GET"])
 def users():
-    data = [
-        {'nome': 'Gabriel Castelan',
-        'login': 'gabriel.castelan',
-        'permissão': PERMISSOES['admin']},
-        {'nome': 'Alexandre Buratto',
-        'login': 'xande.buratto',
-        'permissão': PERMISSOES['admin'] | PERMISSOES['avaliador']},
-        {'nome': 'Sofia Oliveira',
-        'login': 'sofia.oliveira',
-        'permissão': PERMISSOES['estilista']},
-        {'nome': 'Miguel Santos',
-        'login': 'miguel.santos',
-        'permissão': 0},  # No permissions
-        {'nome': 'Beatriz Almeida',
-        'login': 'beatriz.almeida',
-        'permissão': PERMISSOES['avaliador']},
-        {'nome': 'Carolina Lima',
-        'login': 'carolina.lima',
-        'permissão': PERMISSOES['estilista'] | PERMISSOES['avaliador']},  # Estilista and avaliador
-        {'nome': 'Daniel Rocha',
-        'login': 'daniel.rocha',
-        'permissão': PERMISSOES['admin'] & ~PERMISSOES['avaliador']},  # Admin but not avaliador (use bitwise AND and NOT)
-        {'nome': 'Eduardo Silva',
-        'login': 'eduardo.silva',
-        'permissão': 3},  # Combination not defined in dictionary (use integer value directly)
-        {'nome': 'Gabriel Castelan',
-        'login': 'gabriel.castelan',
-        'permissão': PERMISSOES['gerar_imagens'] | PERMISSOES['visualizar_imagens']},
-        {'nome': 'Sofia Oliveira',
-        'login': 'sofia.oliveira',
-        'permissão': PERMISSOES['deletar_imagens'] | PERMISSOES['alterar_imagens']},
-        {'nome': 'João Fernandes',
-        'login': 'joao.fernandes',
-        'permissão': PERMISSOES['cadastrar_usuario'] | PERMISSOES['consultar_usuario']},
-        {'nome': 'Mariana Costa',
-        'login': 'mariana.costa',
-        'permissão': PERMISSOES['deletar_usuario'] | PERMISSOES['editar_permissoes_usuario']},
-        {'nome': 'Eduardo Silva',
-        'login': 'eduardo.silva',
-        'permissão': PERMISSOES['consultar_historico'] | PERMISSOES['exportar_historico']},
-        {'nome': 'Lara Silva',
-        'login': 'lara.silva',
-        'permissão': PERMISSOES['adicionar_a_galeria'] | PERMISSOES['deletar_da_galeria']},
-        {'nome': 'Beatriz Almeida',
-        'login': 'beatriz.almeida',
-        'permissão': PERMISSOES['visualizar_galeria'] | PERMISSOES['download_galeria']},
-    ]
+    return users_data
 
-    return data
+@app.route('/user/<username>', methods=["GET"])
+def user(username):
+    for user in users_data:
+        if user['login'] == username:
+            permissao = user['permissão']
+            break
+
+    return [permissao]

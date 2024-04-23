@@ -60,7 +60,7 @@ function Gerar(props) {
 
   return (
     <div>
-      <div className='card'>
+      <div className='card card-gerar'>
         <h2>Gerar imagem</h2>
         <form className='card-form' onSubmit={handleSubmit(submitHandler)}>
           <div className='card-marca-e-colecao'>
@@ -70,9 +70,9 @@ function Gerar(props) {
                 {errors.marca && <p className="error">Marca is required</p>}
                 <select id="marca" className='card-select' {...register('marca', { required: true })}>
                   <option>-</option>
-                  <option value="my">My Favorite Things</option>
-                  <option value="lp">Lança Perfume</option>
-                  <option value="am">Amarante do Brasil</option>
+                  <option value="My Favorite Things">My Favorite Things</option>
+                  <option value="Lança Perfume">Lança Perfume</option>
+                  <option value="Amarante do Brasil">Amarante do Brasil</option>
                 </select>
 
               </label>
@@ -82,10 +82,10 @@ function Gerar(props) {
                 <p>Coleção:</p>
                 <select id="colecao" className='card-select' {...register('colecao', { required: true })}>
                   <option>-</option>
-                  <option value="my24">MY24</option>
-                  <option value="my23">MY23</option>
-                  <option value="lp24">LP24</option>
-                  <option value="lp23">LP23</option>
+                  <option value="MY24">MY24</option>
+                  <option value="MY23">MY23</option>
+                  <option value="LP24">LP24</option>
+                  <option value="LP23">LP23</option>
                 </select>
                 {errors.colecao && <p className="error">Coleção is required</p>}
               </label>
@@ -136,7 +136,7 @@ function Gerar(props) {
           {/* <p>{responseData}</p> */}
           {/* <p>{responseData[0]}</p> */}
           <img className="card-result-img" src={`data:image/jpeg;base64,${responseData.imagem}`} />
-          <div>
+          <div className="card-result-info">
             <p>{responseData.marca}</p>
             <p>{responseData.colecao}</p>
           </div>

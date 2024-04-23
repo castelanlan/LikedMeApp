@@ -10,11 +10,11 @@ const PERMISSOES = {
   'admin': 65536,
 };
 
-function TabelaUser() {
+function TabelaUsers() {
   const [users, setUsers] = useState(null);
 
   useEffect(() => {
-    fetch("/users").then((response) => response.json()).then((data) => { setUsers(data); console.log(data) }).catch((error) => console.log(error))
+    fetch("/users").then((response) => response.json()).then((data) => { setUsers(data) }).catch((error) => console.log(error))
   }, []);
 
 
@@ -58,7 +58,7 @@ function TabelaUser() {
                     <img src={X} height="16" alt="Ícone de proibido" />
                   )}
                 </td>
-                <td className="tbl-user-right">Histórico Permissões</td>
+                <td className="tbl-user-right"><a href="/">Histórico</a> <a href="/">Permissões</a></td>
               </tr>
             ))
           ) : (
@@ -83,6 +83,24 @@ function TabelaUser() {
   </div>)
 }
 
+function TabelaUserPerms() {
+  const [userperms, setUserperms] = useState([]);
+
+  useEffect(() => {
+    fetch("/user/gabriel.castelan").then((response) => response.json()).then((data) => { setUserperms(data) }).catch((error) => console.log(error))
+  }, []);
+
+  return (
+    <>
+    { userperms && userperms !== 0 ? (
+      <p>Yes {userperms}</p>
+    ) : (
+      <p>No {userperms}</p>
+    )}
+    </>
+  );
+}
+
 function Cadastros() {
   return (
     <div>
@@ -90,20 +108,24 @@ function Cadastros() {
         <div className="cdstro-header">
           <div className="cdstro-usuario">
             <h2>Usuários</h2>
-            <p>Mostrando 1 de 50 usuários</p>
+            <p className="cdstro-small-t">Mostrando 1 de 50 usuários</p>
           </div>
           <div className="cdstro">
             <form>
-              <input type="textarea" id="pesquisa" placeholder="Pesquisar" />
+              <input className="cdstro-small-t" type="textarea" id="pesquisa" placeholder="Pesquisar" />
               <svg className="cdstro-usuario-icon w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" ><path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
             </form>
           </div>
         </div>
-        <TabelaUser />
+        <TabelaUsers />
       </div>
-      <div className="card card-cadastros">
-        <h2>Gabriel Castelan</h2>
-        <p>Permissões de usuário</p>
+      <div className="card card-cadastros card-cadastros-user">
+        <div className="card-user-header">
+          <h2>Gabriel Castelan</h2>
+          <p>Permissões detalhadas de usuário</p>
+        </div>
+        {/* <p>Permissões de usuário detalhada</p> */}
+        <TabelaUserPerms />
       </div>
 
     </div>
