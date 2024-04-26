@@ -35,7 +35,7 @@ function Content() {
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" id="app-component">
       <Nav>
       </Nav>
       <Main>

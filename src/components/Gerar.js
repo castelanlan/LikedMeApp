@@ -3,27 +3,26 @@ import React from "react";
 import { Controller, useForm } from 'react-hook-form';
 import { useState } from "react";
 import { useEffect } from "react";
-
+import Modal from 'react-modal';
 import './gerar.css'
+
+Modal.setAppElement(document.getElementById('root'));
 
 function Gerar(props) {
 
-  // const handleFileInputChange = (event) => {
-  //   try {
-  //     const file = event.target.files[0];
-  //     const reader = new FileReader();
-  //     const types = ["jpeg", "png", "gif"];
+  const [modalIsOpen, setIsOpen] = React.useState(false);
 
-  //     reader.onload = () => {
-  //       const isImage = fileTypeChecker.validateFileType(reader.result, types);
-  //       console.log(isImage); // Returns true if the file is an image from the accepted list
-  //     };
+  function openModal() {
+    setIsOpen(true);
+  }
 
-  //     reader.readAsArrayBuffer(file);
-  //   } catch (err) {
-  //     console.error("Error: ", err.message);
-  //   }
-  // };
+  function afterOpenModal() {
+    console.log(errors)
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   const [responseData, setResponseData] = useState(null);
   const { control, register, handleSubmit, formState: { errors } } = useForm();
@@ -46,20 +45,44 @@ function Gerar(props) {
       method: 'POST',
       body: formData,
     })
-      .then((response) => response.json()).then((data) => setResponseData(data)).
-      catch((error) => {// Handle request errors
-      });
+      .then((response) => response.json()).then((data) => setResponseData(data))
+      .catch((error) => { console.error(error) }
+      );
   };
 
   useEffect(() => {
     if (responseData) {
-      console.log(responseData); // Optional: log the response data
+      // console.log(responseData); // Optional: log the response data
       setResponseData(responseData)
     }
   }, [responseData]);
 
   return (
     <div>
+      <Modal
+        isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        className="Modal"
+        overlayClassName="Overlay"
+        contentLabel="Modal"
+      >
+        <div>
+          {errors > 0 ?
+            (<div>
+              <h3>Erros</h3>
+              {errors.file && <p className="error" style={{ color: 'red', paddingTop: '.5em' }}>Por favor, envie um arquivo da peça</p>}
+              {errors.marca && <p className="error" style={{ color: 'red', marginTop: '.5em' }}>Por favor, insira uma marca para a peça</p>}
+              {errors.colecao && <p className="error" style={{ color: 'red', marginTop: '.5em' }}>Por favor, digite uma coleção para a peça</p>}
+              {errors.descricao && <p className="error" style={{ color: 'red', marginTop: '.5em' }}>Por favor, digite uma descrição da peça</p>}
+            </div>) : (
+              <h3>Sem erros</h3>
+            )
+          }
+
+          <button onClick={closeModal}>close</button>
+        </div>
+      </Modal>
       <div className='card card-gerar'>
         <h2>Gerar imagem</h2>
         <form className='card-form' onSubmit={handleSubmit(submitHandler)}>
@@ -67,9 +90,8 @@ function Gerar(props) {
             <div>
               <label>
                 <p>Marca:</p>
-                {errors.marca && <p className="error">Marca is required</p>}
                 <select id="marca" className='card-select' {...register('marca', { required: true })}>
-                  <option>-</option>
+                  <option value="">-</option>
                   <option value="My Favorite Things">My Favorite Things</option>
                   <option value="Lança Perfume">Lança Perfume</option>
                   <option value="Amarante do Brasil">Amarante do Brasil</option>
@@ -81,13 +103,12 @@ function Gerar(props) {
               <label id="lbl-colecao">
                 <p>Coleção:</p>
                 <select id="colecao" className='card-select' {...register('colecao', { required: true })}>
-                  <option>-</option>
+                  <option value="">-</option>
                   <option value="MY24">MY24</option>
                   <option value="MY23">MY23</option>
                   <option value="LP24">LP24</option>
                   <option value="LP23">LP23</option>
                 </select>
-                {errors.colecao && <p className="error">Coleção is required</p>}
               </label>
             </div>
           </div>
@@ -96,8 +117,6 @@ function Gerar(props) {
               <p>Descrição do produto:</p>
 
               <input type='textarea' id='descricao' placeholder='Insira aqui a descrição do produto' {...register('descricao', { required: true })} />
-              {errors.descricao && <p className="error">Descrição is required</p>}
-              {errors.descricao && <span className="error" style={{ color: 'red', marginTop: '.5em' }}>Por favor, digite uma descrição do produto</span>}
             </label>
 
           </div>
@@ -122,10 +141,9 @@ function Gerar(props) {
                 }}
               />
             </label>
-            {errors.file && <span className="error" style={{ color: 'red', paddingTop: '.5em' }}>Por favor, envie um arquivo do produto</span>}
           </div>
           <div className='card-submit'>
-            <input className='card-submit-button' type="submit" value="Gerar imagem" />
+            <input className='card-submit-button' type="submit" value="Gerar imagem" onClick={openModal} />
             {/* <button>Salvar</button> */}
             <p>Créditos restantes: R$50.000</p>
           </div>
@@ -135,7 +153,7 @@ function Gerar(props) {
         <div className="card card-result">
           {/* <p>{responseData}</p> */}
           {/* <p>{responseData[0]}</p> */}
-          <img className="card-result-img" src={`data:image/jpeg;base64,${responseData.imagem}`} />
+          <img className="card-result-img" src={`data:image/jpeg;base64,${responseData.imagem}`} alt="resultado da geração" />
           <div className="card-result-info">
             <p>{responseData.marca}</p>
             <p>{responseData.colecao}</p>

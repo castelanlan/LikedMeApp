@@ -1,12 +1,16 @@
 # LikedMe
 
-Este projeto é uma aplicação web construída com front-end em React e back-end em Flask. \
-O Flask expõe uma RESTful API.
+Este repositório contém o código do front-end da aplicação do projeto LikedMe.
 
-## Tecnologias
+Para funcionamento, ele deve estar ligado com uma API que fornece os dados de usuários e faz a transformação de imagem. \
+Para testes locais pode ser usado o Flask, que expõe uma API com dados para testes.
+
+<!-- ## Tecnologias
 Frontend: React
+
 Backend: Flask (Python)
-API: RESTful (implementada com uma extensão Flask como Flask-RESTful)
+
+API: RESTful (implementada com uma extensão Flask como Flask-RESTful) -->
 
 ## Estrutura do Projeto
 O app é uma [single page application](https://blog.pshrmn.com/how-single-page-applications-work/), cada "página" seria um componente do React diferente renderizado
@@ -16,18 +20,18 @@ app-liked-me/
 │   ├── .flaskenv
 │   └── api.py # Código API
 │
-├── public/
+├── public/ # diretório público, assets estáticos são armazenados aqui
 │
 ├── src/
 │   ├── components/ # componentes
-│   │   ├── acessos.css # estilos do componente (página) Acessos
-│   │   ├── Acessos.js # componente Acessos
+│   │   ├── acessos.css # estilos do componente `Acessos`
+│   │   ├── Acessos.js # componente `Acessos`
 │   │   ├── adm-imagens.css
 │   │   ├── AdmImagens.js
 │   │   └── ...
 │   │   
-│   ├── App.css # estilos gerais do app
-│   ├── App.js  # Código principal, rotas do React router
+│   ├── App.css # estilos do app aplicados em todos os componentes
+│   ├── App.js  # Componente principal e rotas do React router
 │   └── ...
 │
 ├── .gitignore
@@ -39,7 +43,7 @@ app-liked-me/
 ```
 ## Primeiros passos
 **1. Pré-requisitos**
-- Powershell / bash
+
 - Node.js e npm.
 - Python 3 e pip.
 
@@ -76,12 +80,10 @@ Nota: React vai fazer um proxy para as chamadas de API, configurado em `package.
 
 
 **5. Desenvolvimento**
-Alterações no código tanto front quanto back serão atualizadas automaticamente ao salvar um arquivo.
 
-## Documentação da API
-**Endpoints**
-- /.../..
-  - ...
+Alterações no código React são atualizadas automaticamente.
+
+
 ## Produção
 
 --
