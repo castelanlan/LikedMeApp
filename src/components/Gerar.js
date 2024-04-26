@@ -29,14 +29,12 @@ function Gerar(props) {
 
   const submitHandler = (data, e) => {
     e.preventDefault();
-    console.log(data)
+    // console.log(data)
 
     const { marca, colecao, descricao, arquivo } = data
-    // const file = arquivo[0]
 
     const formData = new FormData();
     formData.append('arquivo', arquivo[0]);
-    // data = { ...data, picture: data.picture[0].name };
     formData.append('marca', marca);
     formData.append('colecao', colecao);
     formData.append('descricao', descricao);
@@ -68,7 +66,7 @@ function Gerar(props) {
         contentLabel="Modal"
       >
         <div className="modal-main">
-          {errors ? (
+          {Object.keys(errors).length ? ( // https://stackoverflow.com/questions/32615713/tobetrue-vs-tobetruthy-vs-tobetrue#32767435
             <div>
               <h1>Erros</h1>
               {errors.marca && <p className="error">Por favor, insira uma marca para a peça</p>}
@@ -76,14 +74,24 @@ function Gerar(props) {
               {errors.arquivo && <p className="error">Por favor, envie um arquivo da peça</p>}
               {errors.descricao && <p className="error">Por favor, digite uma descrição da peça</p>}
             </div>
-            ) : (
+          ) : (
             <div>
               <h1>Gerando imagens...</h1>
-
+              {console.log(responseData.imagem[0]) &&
+                <div className="card card-result">
+                  <img className="card-result-img" src={`data:image/jpeg;base64,${responseData.imagem[0]}`} alt="resultado da geração" />
+                  <div className="card-result-info">
+                    <p>{responseData.marca}</p>
+                    <p>{responseData.colecao}</p>
+                  </div>
+                  <p>{responseData.descricao}</p>
+                  <button>Aprovar</button>
+                  <button>Negar</button>
+                </div>
+              }
             </div>
-            )
+          )
           }
-
           <button onClick={closeModal} id="modal-close">close</button>
         </div>
       </Modal>
@@ -154,17 +162,6 @@ function Gerar(props) {
 
         </form>
       </div>
-
-      {responseData &&
-        <div className="card card-result">
-          <img className="card-result-img" src={`data:image/jpeg;base64,${responseData.imagem}`} alt="resultado da geração" />
-          <div className="card-result-info">
-            <p>{responseData.marca}</p>
-            <p>{responseData.colecao}</p>
-          </div>
-          <p>{responseData.descricao}</p>
-        </div>
-      }
     </div>
   );
 }

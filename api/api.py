@@ -1,8 +1,10 @@
 # from datetime import datetime
+from time import sleep
 from flask import Flask, request, Response
 import json
 from icecream import ic
 import base64 as b64
+import random 
 
 app = Flask(__name__)
 
@@ -79,14 +81,14 @@ def form():
     if request.method == "GET":
         return Response(response="Invalid method.", status=500)
     
-    # __import__('time').sleep(2)
-    
-    # ic(request)
     file_data = b64.b64encode(request.files["arquivo"].read()).decode("utf-8")
-    # ic(file_data)
+    file_data2 = ''.join(random.sample(file_data,len(file_data)))
 
     r = dict(request.form)
-    r['imagem'] = file_data
+    r['imagem'] = [
+        file_data,
+        file_data2
+    ]
 
     response = Response(
         response=json.dumps(r),
@@ -95,7 +97,8 @@ def form():
         mimetype='application/json'
     )
 
-    # ic(response)
+    sleep(1)
+
     return response
 
 @app.route('/users', methods=["GET"])
