@@ -67,43 +67,48 @@ function Gerar(props) {
         overlayClassName="Overlay"
         contentLabel="Modal"
       >
-        <div>
-          {errors > 0 ?
-            (<div>
-              <h3>Erros</h3>
-              {errors.file && <p className="error" style={{ color: 'red', paddingTop: '.5em' }}>Por favor, envie um arquivo da peça</p>}
-              {errors.marca && <p className="error" style={{ color: 'red', marginTop: '.5em' }}>Por favor, insira uma marca para a peça</p>}
-              {errors.colecao && <p className="error" style={{ color: 'red', marginTop: '.5em' }}>Por favor, digite uma coleção para a peça</p>}
-              {errors.descricao && <p className="error" style={{ color: 'red', marginTop: '.5em' }}>Por favor, digite uma descrição da peça</p>}
-            </div>) : (
-              <h3>Sem erros</h3>
+        <div className="modal-main">
+          {errors ? (
+            <div>
+              <h1>Erros</h1>
+              {errors.marca && <p className="error">Por favor, insira uma marca para a peça</p>}
+              {errors.colecao && <p className="error">Por favor, digite uma coleção para a peça</p>}
+              {errors.arquivo && <p className="error">Por favor, envie um arquivo da peça</p>}
+              {errors.descricao && <p className="error">Por favor, digite uma descrição da peça</p>}
+            </div>
+            ) : (
+            <div>
+              <h1>Gerando imagens...</h1>
+
+            </div>
             )
           }
 
-          <button onClick={closeModal}>close</button>
+          <button onClick={closeModal} id="modal-close">close</button>
         </div>
       </Modal>
       <div className='card card-gerar'>
         <h2>Gerar imagem</h2>
         <form className='card-form' onSubmit={handleSubmit(submitHandler)}>
           <div className='card-marca-e-colecao'>
+
             <div>
               <label>
                 <p>Marca:</p>
                 <select id="marca" className='card-select' {...register('marca', { required: true })}>
-                  <option value="">-</option>
+                  <option value=""></option>
                   <option value="My Favorite Things">My Favorite Things</option>
                   <option value="Lança Perfume">Lança Perfume</option>
                   <option value="Amarante do Brasil">Amarante do Brasil</option>
                 </select>
-
               </label>
             </div>
+
             <div>
               <label id="lbl-colecao">
                 <p>Coleção:</p>
                 <select id="colecao" className='card-select' {...register('colecao', { required: true })}>
-                  <option value="">-</option>
+                  <option value=""></option>
                   <option value="MY24">MY24</option>
                   <option value="MY23">MY23</option>
                   <option value="LP24">LP24</option>
@@ -112,14 +117,14 @@ function Gerar(props) {
               </label>
             </div>
           </div>
+
           <div className='card-descricao'>
             <label>
               <p>Descrição do produto:</p>
-
               <input type='textarea' id='descricao' placeholder='Insira aqui a descrição do produto' {...register('descricao', { required: true })} />
             </label>
-
           </div>
+
           <div className='card-upload'>
             <label>
               <p>Upload do esboço</p>
@@ -138,29 +143,28 @@ function Gerar(props) {
                         }}
                       {...register('arquivo', { required: true, type: 'file' })} />
                   );
-                }}
-              />
+                }} />
             </label>
           </div>
+
           <div className='card-submit'>
             <input className='card-submit-button' type="submit" value="Gerar imagem" onClick={openModal} />
-            {/* <button>Salvar</button> */}
             <p>Créditos restantes: R$50.000</p>
           </div>
+
         </form>
       </div>
+
       {responseData &&
         <div className="card card-result">
-          {/* <p>{responseData}</p> */}
-          {/* <p>{responseData[0]}</p> */}
           <img className="card-result-img" src={`data:image/jpeg;base64,${responseData.imagem}`} alt="resultado da geração" />
           <div className="card-result-info">
             <p>{responseData.marca}</p>
             <p>{responseData.colecao}</p>
           </div>
           <p>{responseData.descricao}</p>
-          {/* <p>{responseData.imagem}</p> */}
-        </div>}
+        </div>
+      }
     </div>
   );
 }

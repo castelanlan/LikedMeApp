@@ -149,7 +149,8 @@ label>p {
   align-items: center;
 }
 
-.card-submit-button {
+.card-submit-button,
+#modal-close {
   padding: 1.5em 2em;
   color: #fff;
   background-color: #2E29FF;
@@ -204,4 +205,19 @@ label>p {
   bottom: 0;
   background-color: rgba(255 255 255 / .75);
   z-index: 2;
+}
+
+.modal-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.error {
+  color: red;
+  margin-top: .5em;
+}
+
+#modal-close {
+  padding: 1em 2em;
+  margin: 1em 0;
 }
