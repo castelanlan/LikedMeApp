@@ -82,12 +82,13 @@ def form():
         return Response(response="Invalid method.", status=500)
     
     file_data = b64.b64encode(request.files["arquivo"].read()).decode("utf-8")
-    file_data2 = ''.join(random.sample(file_data,len(file_data)))
 
     r = dict(request.form)
     r['imagem'] = [
         file_data,
-        file_data2
+        file_data,
+        file_data,
+        file_data
     ]
 
     response = Response(

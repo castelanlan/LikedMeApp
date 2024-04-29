@@ -61,13 +61,14 @@ function Gerar(props) {
         isOpen={modalIsOpen}
         onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
+        shouldCloseOnOverlayClick={false}
         className="Modal"
         overlayClassName="Overlay"
         contentLabel="Modal"
       >
         <div className="modal-main">
           {Object.keys(errors).length ? ( // https://stackoverflow.com/questions/32615713/tobetrue-vs-tobetruthy-vs-tobetrue#32767435
-            <div>
+            <div className="modal-errors">
               <h1>Erros</h1>
               {errors.marca && <p className="error">Por favor, insira uma marca para a peça</p>}
               {errors.colecao && <p className="error">Por favor, digite uma coleção para a peça</p>}
@@ -75,24 +76,36 @@ function Gerar(props) {
               {errors.descricao && <p className="error">Por favor, digite uma descrição da peça</p>}
             </div>
           ) : (
-            <div>
-              <h1>Gerando imagens...</h1>
-              {console.log(responseData.imagem[0]) &&
-                <div className="card card-result">
-                  <img className="card-result-img" src={`data:image/jpeg;base64,${responseData.imagem[0]}`} alt="resultado da geração" />
-                  <div className="card-result-info">
+            <div className="card-result-wrapper">
+              {/* <h1 id="modal-title">Gerando imagens...</h1> */}
+              {responseData &&
+                <div className="modal-success">
+                  {responseData.imagem.map((imagem, index) => (
+                    <div className="modal-result-img-wrapper">
+                      <img
+                        key={index}
+                        className="modal-result-img"
+                        width="200px"
+                        src={`data:image/jpeg;base64,${imagem}`}
+                        alt={`Resultado da geração ${index + 1}`}
+                      />
+                      <div className="modal-result-control">
+                        <button className="modal-control">Aprovar</button>
+                        <button className="modal-control">Negar</button>
+                      </div>
+                    </div>
+                  ))}
+                  {/* <div className="card-result-info">
                     <p>{responseData.marca}</p>
                     <p>{responseData.colecao}</p>
                   </div>
-                  <p>{responseData.descricao}</p>
-                  <button>Aprovar</button>
-                  <button>Negar</button>
+                  <p>{responseData.descricao}</p> */}
                 </div>
               }
             </div>
           )
           }
-          <button onClick={closeModal} id="modal-close">close</button>
+          <button onClick={closeModal} id="modal-close">Fechar</button>
         </div>
       </Modal>
       <div className='card card-gerar'>
