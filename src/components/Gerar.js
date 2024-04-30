@@ -6,13 +6,16 @@ import { useEffect } from "react";
 import Modal from 'react-modal';
 import './gerar.css'
 
+import R from '../assets/R.png';
+import V from '../assets/V.png';
+
 Modal.setAppElement(document.getElementById('root'));
 
 function Gerar(props) {
 
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
-  function openModal() {
+  function submit() {
     setIsOpen(true);
   }
 
@@ -67,6 +70,7 @@ function Gerar(props) {
         contentLabel="Modal"
       >
         <div className="modal-main">
+          <button onClick={closeModal} id="modal-close">X</button>
           {Object.keys(errors).length ? ( // https://stackoverflow.com/questions/32615713/tobetrue-vs-tobetruthy-vs-tobetrue#32767435
             <div className="modal-errors">
               <h1>Erros</h1>
@@ -76,36 +80,44 @@ function Gerar(props) {
               {errors.descricao && <p className="error">Por favor, digite uma descrição da peça</p>}
             </div>
           ) : (
-            <div className="card-result-wrapper">
-              {/* <h1 id="modal-title">Gerando imagens...</h1> */}
-              {responseData &&
+            <div className="modal-result-wrapper">
+              {responseData ? (
                 <div className="modal-success">
-                  {responseData.imagem.map((imagem, index) => (
-                    <div className="modal-result-img-wrapper">
-                      <img
-                        key={index}
-                        className="modal-result-img"
-                        width="200px"
-                        src={`data:image/jpeg;base64,${imagem}`}
-                        alt={`Resultado da geração ${index + 1}`}
-                      />
-                      <div className="modal-result-control">
-                        <button className="modal-control">Aprovar</button>
-                        <button className="modal-control">Negar</button>
-                      </div>
-                    </div>
-                  ))}
-                  {/* <div className="card-result-info">
+
+                  <div className="modal-result-info">
+                    <h1>Geração concluída, por favor avalie as imagens</h1>
                     <p>{responseData.marca}</p>
                     <p>{responseData.colecao}</p>
+                    <p>{responseData.descricao}</p>
                   </div>
-                  <p>{responseData.descricao}</p> */}
+
+                  <div className="modal-success-gallery">
+                    {responseData.imagem.map((imagem, index) => (
+                      <div key={index} className="modal-result-img-wrapper">
+                        <img
+                          key={index}
+                          className="modal-result-img"
+                          width="200px"
+                          src={`data:image/jpeg;base64,${imagem}`}
+                          alt={`Resultado da geração ${index + 1}`} />
+
+                        <div className="modal-result-control">
+                          <button className="modal-control" onClick={setSelected(index)}><img src={V} height="32" alt="Ícone de verificado" /></button>
+                          <button className="modal-control" onClick={setUnselected(index)}><img src={R} height="32" alt="Ícone de refazer" /></button>
+                        </div>
+                      </div>
+                    ))
+                    }
+                  </div> {/*  galeria */}
+                </div> // sucesso
+              ) : (
+                <div className="modal-wait">
+                  <h1>Gerando imagem, por favor aguarde</h1>
                 </div>
-              }
-            </div>
+              )}
+            </div> // modal
           )
           }
-          <button onClick={closeModal} id="modal-close">Fechar</button>
         </div>
       </Modal>
       <div className='card card-gerar'>
@@ -169,7 +181,7 @@ function Gerar(props) {
           </div>
 
           <div className='card-submit'>
-            <input className='card-submit-button' type="submit" value="Gerar imagem" onClick={openModal} />
+            <input className='card-submit-button' type="submit" value="Gerar imagem" onClick={submit} />
             <p>Créditos restantes: R$50.000</p>
           </div>
 
