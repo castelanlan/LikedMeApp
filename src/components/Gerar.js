@@ -14,17 +14,39 @@ Modal.setAppElement(document.getElementById('root'));
 function Gerar(props) {
 
   const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [selected, setSelected] = useState("");
+  // const [unselected, setUnselected] = useState([]);
 
   function submit() {
     setIsOpen(true);
   }
 
   function afterOpenModal() {
-    console.log(errors)
+    console.log(selected)
   }
 
   function closeModal() {
     setIsOpen(false);
+  }
+
+  function updateUnselected(imagem) {
+
+  }
+
+  function updateSelected(imagem) {
+    if (selected.includes(imagem)) {
+      console.log(selected);
+      return;
+    }
+
+    if (selected == []) {
+      setSelected(imagem);
+      console.log(selected);
+      return;
+    }
+
+    setSelected([...selected, imagem]);
+    console.log(selected);
   }
 
   const [responseData, setResponseData] = useState(null);
@@ -32,7 +54,6 @@ function Gerar(props) {
 
   const submitHandler = (data, e) => {
     e.preventDefault();
-    // console.log(data)
 
     const { marca, colecao, descricao, arquivo } = data
 
@@ -47,13 +68,12 @@ function Gerar(props) {
       body: formData,
     })
       .then((response) => response.json()).then((data) => setResponseData(data))
-      .catch((error) => { console.error(error) }
+      .catch((error) => { console.error(error) } // erros da api, conexão com ela, resposta dela, etc
       );
   };
 
   useEffect(() => {
     if (responseData) {
-      // console.log(responseData); // Optional: log the response data
       setResponseData(responseData)
     }
   }, [responseData]);
@@ -102,8 +122,8 @@ function Gerar(props) {
                           alt={`Resultado da geração ${index + 1}`} />
 
                         <div className="modal-result-control">
-                          <button className="modal-control" onClick={setSelected(index)}><img src={V} height="32" alt="Ícone de verificado" /></button>
-                          <button className="modal-control" onClick={setUnselected(index)}><img src={R} height="32" alt="Ícone de refazer" /></button>
+                          <button className="modal-control" onClick={() => updateSelected(imagem)}><img src={V} height="32" alt="Ícone de verificado" /></button>
+                          <button className="modal-control" onClick={() => updateUnselected(imagem)}><img src={R} height="32" alt="Ícone de refazer" /></button>
                         </div>
                       </div>
                     ))

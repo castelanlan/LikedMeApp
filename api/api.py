@@ -4,7 +4,20 @@ from flask import Flask, request, Response
 import json
 from icecream import ic
 import base64 as b64
-import random 
+import os
+
+def read_all_file_contents(directory_path):
+    file_contents = []
+    for filename in os.listdir(directory_path):
+        filepath = os.path.join(directory_path, filename)
+
+        with open(filepath, "r") as file:
+            content = file.read()
+
+        file_contents.append(content)
+    return file_contents
+
+bases64 = read_all_file_contents("./imagens")
 
 app = Flask(__name__)
 
@@ -82,13 +95,12 @@ def form():
         return Response(response="Invalid method.", status=500)
     
     file_data = b64.b64encode(request.files["arquivo"].read()).decode("utf-8")
+    
 
     r = dict(request.form)
     r['imagem'] = [
         file_data,
-        file_data,
-        file_data,
-        file_data
+        *bases64
     ]
 
     response = Response(
