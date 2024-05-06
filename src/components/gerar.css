@@ -192,6 +192,7 @@ label>p {
   display: flex;
   flex-direction: column;
   width: 100%;
+  align-items: stretch;
 }
 
 .error {
@@ -201,12 +202,13 @@ label>p {
 
 #modal-close {
   background-color: black;
-  padding: 1em 2em;
-  margin: 1em 0;
-  width: 12ch;
   box-shadow: var(--shadow);
   transition: all .2s;
-  float: inline-end;
+  align-self: flex-end;
+}
+
+#modal-close:hover {
+  background-color: rgb(172, 8, 8);
 }
 
 #modal-close:hover,
@@ -216,10 +218,10 @@ label>p {
 
 
 .modal-result-img-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   margin: 1em 0;
-  /* width: 30ch; */
 }
 
 .modal-result-info {
@@ -235,7 +237,6 @@ label>p {
 }
 
 .modal-result-img {
-  width: 100%;
   border-radius: 5px;
   box-shadow: var(--shadow);
 }
@@ -249,7 +250,6 @@ label>p {
   margin: 1em 0;
   flex-grow: 1;
   padding: 1em 0;
-  /* box-shadow: var(--shadow); */
   transition: all .2s;
   background-color: transparent;
 }
@@ -260,4 +260,16 @@ label>p {
 
 .modal-result-control > button:nth-child(2):hover {
   background-color: #527dc9;
+}
+
+.indica-aprovacao {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  transform: rotate(-10deg);
+}
+
+.indica-aprovacao>img {
+  box-shadow: var(--shadow);
+  border-radius: 5px;
 }

@@ -98,6 +98,7 @@ def form():
     
 
     r = dict(request.form)
+    # print([i[176: 186] for i in bases64])
     r['imagem'] = [
         file_data,
         *bases64
