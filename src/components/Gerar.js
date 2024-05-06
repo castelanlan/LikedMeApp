@@ -109,39 +109,41 @@ function Gerar(props) {
               {responseData ? (
                 <div className="modal-success">
 
-                  <div className="modal-result-info">
-                    <h1>Geração concluída, por favor avalie as imagens</h1>
-                    <p>{responseData.marca}</p>
-                    <p>{responseData.colecao}</p>
-                    <p>{responseData.descricao}</p>
+                  <div className="modal-success-header">
+                    <h1>Por favor avalie as imagens</h1>
                   </div>
 
-                  <div className="modal-success-gallery">
-                    {responseData.imagem.map((image_data, index) => (
-                      <div key={index} className="modal-result-img-wrapper">
-                        <img
-                          key={index}
-                          className="modal-result-img"
-                          width="200px"
-                          src={`data:image/jpeg;base64,${image_data}`}
-                          alt={`Resultado da geração ${index + 1}`} />
-                        <div className="indica-aprovacao">
-                          {selected.includes(image_data) ? (
-                            <img src={V} height={24}/>
-                          ) : (
-                            <img src={R} height={24}/>
-                          )}
-                        </div>
+                  <div className="modal-success-row">
+                    <div>
+                      <p>{responseData.marca}</p>
+                      <p>{responseData.colecao}</p>
+                      <p>{responseData.descricao}</p>
+                    </div>
 
-                        <div className="modal-result-control">
-                          <button className="modal-control" onClick={() => updateSelected(image_data)}><img src={V} height="32" alt="Ícone de verificado" /></button>
-                          <button className="modal-control" onClick={() => updateUnselected(image_data)}><img src={R} height="32" alt="Ícone de refazer" /></button>
-                        </div>
-                      </div>
-                    ))
-                    }
-                  </div> {/*  galeria */}
-                  <button onClick={() => printarSelected()}>Printar selected</button>
+                    <div className="modal-success-gallery">
+                      {responseData.imagem.map((image_data, index) => (
+                        
+                        <div key={index} className="modal-success-img-wrapper">
+                          <img key={index} width="200px" alt={`Resultado da geração ${index + 1}`} 
+                            className="modal-success-img"
+                            src={`data:image/jpeg;base64,${image_data}`}/>
+
+                          <div className="indica-aprovacao">
+                            {selected.includes(image_data) ? (<img src={V} height={24} />) : (<img src={R} height={24} />)}
+                          </div>
+
+                          <div className="modal-success-control">
+                            <button className="modal-control" onClick={() => updateSelected(image_data)}><img src={V} height="32" alt="Ícone de verificado" /></button>
+                            <button className="modal-control" onClick={() => updateUnselected(image_data)}><img src={R} height="32" alt="Ícone de refazer" /></button>
+                          </div>
+
+                        </div>)
+                        )
+                      }
+                    </div> {/*  galeria */}
+                  </div>
+                  <button /*onClick={() => confirmarSelecionados() }*/>Confirmar seleção</button>
+                  <button /*onClick={() => reprocessarImagens() }*/>Reprocessar</button>
                 </div> // sucesso
               ) : (
                 <div className="modal-wait">
