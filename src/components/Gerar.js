@@ -1,5 +1,5 @@
 import React from "react";
-// import fileTypeChecker from "file-type-checker";
+
 import { Controller, useForm } from 'react-hook-form';
 import { useState } from "react";
 import { useEffect } from "react";
@@ -13,33 +13,19 @@ Modal.setAppElement(document.getElementById('root'));
 
 function Gerar(props) {
 
-  /**
-   *  @type {useState<boolean>}
-   */
   const [modalIsOpen, setIsOpen] = React.useState(false);
-  /**
-   *  @type {useState<list>}
-   */
   const [selected, setSelected] = useState([]);
-  /**
-   *  @type {useState<list>}
-   */
-  const [responseData, setResponseData] = useState(null);
 
-  function submit() {
+  function openModal() {
     setIsOpen(true);
-  }
-
-  function afterOpenModal() {
-    console.log(selected)
   }
 
   function closeModal() {
     setIsOpen(false);
+    console.log("fechado")
   }
 
   function updateUnselected(imagem) {
-    // console.log(imagem.slice(40, 60));
     setSelected(selected.filter((id) => id !== imagem));
   }
 
@@ -47,14 +33,11 @@ function Gerar(props) {
     if (selected.includes(imagem)) {
       return;
     }
+
     setSelected([...selected, imagem]);
-    // console.log(imagem.slice(40, 60));
   }
 
-  function printarSelected() {
-    console.log(selected)
-  }
-
+  const [responseData, setResponseData] = useState(null);
   const { control, register, handleSubmit, formState: { errors } } = useForm();
 
   const submitHandler = (data, e) => {
@@ -73,7 +56,7 @@ function Gerar(props) {
       body: formData,
     })
       .then((response) => response.json()).then((data) => setResponseData(data))
-      .catch((error) => { console.error(error) } // erros da api, conexão com ela, resposta dela, etc
+      .catch((error) => { console.error(error) } // erros da api, conexão com ela, resposta dela, etc estarão aqui
       );
   };
 
@@ -81,7 +64,9 @@ function Gerar(props) {
     if (responseData) {
       setResponseData(responseData)
     }
-  }, [responseData]);
+  }, [responseData]); // todo ?
+
+  const afterOpenModal = () => {}
 
   return (
     <div>
@@ -122,11 +107,11 @@ function Gerar(props) {
 
                     <div className="modal-success-gallery">
                       {responseData.imagem.map((image_data, index) => (
-                        
+
                         <div key={index} className="modal-success-img-wrapper">
-                          <img key={index} width="200px" alt={`Resultado da geração ${index + 1}`} 
+                          <img key={index} width="200px" alt={`Resultado da geração ${index + 1}`}
                             className="modal-success-img"
-                            src={`data:image/jpeg;base64,${image_data}`}/>
+                            src={`data:image/jpeg;base64,${image_data}`} />
 
                           <div className="indica-aprovacao">
                             {selected.includes(image_data) ? (<img src={V} height={24} />) : (<img src={R} height={24} />)}
@@ -138,12 +123,14 @@ function Gerar(props) {
                           </div>
 
                         </div>)
-                        )
+                      )
                       }
                     </div> {/*  galeria */}
                   </div>
-                  <button /*onClick={() => confirmarSelecionados() }*/>Confirmar seleção</button>
-                  <button /*onClick={() => reprocessarImagens() }*/>Reprocessar</button>
+                  <div className="modal-success-actions">
+                    <button /*onClick={() => confirmarSelecionados() }*/>Confirmar seleção</button>
+                    <button /*onClick={() => reprocessarImagens() }*/>Reprocessar</button>
+                  </div>
                 </div> // sucesso
               ) : (
                 <div className="modal-wait">
@@ -216,7 +203,7 @@ function Gerar(props) {
           </div>
 
           <div className='card-submit'>
-            <input className='card-submit-button' type="submit" value="Gerar imagem" onClick={submit} />
+            <input className='card-submit-button' type="submit" value="Gerar imagem" onClick={openModal} />
             <p>Créditos restantes: R$50.000</p>
           </div>
 

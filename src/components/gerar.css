@@ -312,3 +312,8 @@ label>p {
   box-shadow: var(--shadow);
   border-radius: 5px;
 }
+
+.modal-success-actions {
+  display: flex;
+  gap: 1em;
+}
