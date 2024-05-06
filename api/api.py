@@ -89,8 +89,8 @@ users_data = [
     'permissão': PERMISSOES['visualizar_galeria'] | PERMISSOES['download_galeria']},
 ]
 
-@app.route('/form', methods=["GET", "POST"])
-def form():
+@app.route('/img2img', methods=["GET", "POST"])
+def img2img():
     if request.method == "GET":
         return Response(response="Invalid method.", status=500)
     
@@ -115,11 +115,11 @@ def form():
 
     return response
 
-@app.route('/users', methods=["GET"])
+@app.route('/usuarios', methods=["GET"])
 def users():
     return users_data
 
-@app.route('/user/<username>', methods=["GET"])
+@app.route('/usuarios/<username>', methods=["GET"])
 def user(username):
     for user in users_data:
         if user['login'] == username:

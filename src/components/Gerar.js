@@ -68,7 +68,7 @@ function Gerar(props) {
     formData.append('colecao', colecao);
     formData.append('descricao', descricao);
 
-    fetch('/form', {
+    fetch('/img2img', {
       method: 'POST',
       body: formData,
     })

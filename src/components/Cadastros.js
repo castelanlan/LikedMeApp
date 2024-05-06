@@ -14,7 +14,7 @@ function TabelaUsers() {
   const [users, setUsers] = useState(null);
 
   useEffect(() => {
-    fetch("/users").then((response) => response.json()).then((data) => { setUsers(data) }).catch((error) => console.log(error))
+    fetch("/usuarios").then((response) => response.json()).then((data) => { setUsers(data) }).catch((error) => console.log(error))
   }, []);
 
 
