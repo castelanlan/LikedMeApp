@@ -95,14 +95,17 @@ def img2img():
         return Response(response="Invalid method.", status=500)
     
     file_data = b64.b64encode(request.files["arquivo"].read()).decode("utf-8")
-    
-
     r = dict(request.form)
-    # print([i[176: 186] for i in bases64])
-    r['imagem'] = [
-        file_data,
-        *bases64
-    ]
+    
+    if a := request.args.get("count"):
+        r['imagem'] = [file_data * a]
+    
+    else:
+        # print([i[176: 186] for i in bases64])
+        r['imagem'] = [
+            file_data,
+            *bases64
+        ]
 
     response = Response(
         response=json.dumps(r),
@@ -111,7 +114,7 @@ def img2img():
         mimetype='application/json'
     )
 
-    sleep(1)
+    # sleep(1)
 
     return response
 

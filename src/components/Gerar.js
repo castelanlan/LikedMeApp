@@ -22,7 +22,6 @@ function Gerar(props) {
 
   function closeModal() {
     setIsOpen(false);
-    console.log("fechado")
   }
 
   function updateUnselected(imagem) {
@@ -35,6 +34,29 @@ function Gerar(props) {
     }
 
     setSelected([...selected, imagem]);
+    console.log(imagem.slice(170, 190))
+  }
+
+  // const salvarEmBanco = (imagens) => {
+  //   console.log(`Imagens salvas no banco -> ${imagens.map(element => element.substring(170, 190))}`)
+  // }
+
+  const reprocessarSelecionados = () => {
+    const contagem = responseData.imagem.length - selected.length
+    
+    fetch(`/img2img?count=${contagem}`).then((response) => response.json()).then((data) => {
+      console.log(data);
+      setResponseData(data);}
+    )
+    
+    // console.log(contagem)
+  }
+
+  const confirmarSelecionados = () => {
+    console.log(selected.map(element => element.substring(170, 190)))
+    // salvarEmBanco(selected);
+    closeModal();
+    return;
   }
 
   const [responseData, setResponseData] = useState(null);
@@ -50,14 +72,18 @@ function Gerar(props) {
     formData.append('marca', marca);
     formData.append('colecao', colecao);
     formData.append('descricao', descricao);
+    // estilista
+    // 
 
     fetch('/img2img', {
       method: 'POST',
       body: formData,
     })
-      .then((response) => response.json()).then((data) => setResponseData(data))
-      .catch((error) => { console.error(error) } // erros da api, conexão com ela, resposta dela, etc estarão aqui
-      );
+      .then((response) => response.json()).then((data) => {
+        console.log(data);
+        setResponseData(data);
+      })
+      .catch((error) => { console.error(error) } ); // erros da api, conexão com ela, resposta dela, etc estarão aqui 
   };
 
   useEffect(() => {
@@ -109,17 +135,17 @@ function Gerar(props) {
                       {responseData.imagem.map((image_data, index) => (
 
                         <div key={index} className="modal-success-img-wrapper">
-                          <img key={index} width="200px" alt={`Resultado da geração ${index + 1}`}
+                          <img key={index} alt={`Resultado da geração ${index + 1}`}
                             className="modal-success-img"
                             src={`data:image/jpeg;base64,${image_data}`} />
 
                           <div className="indica-aprovacao">
-                            {selected.includes(image_data) ? (<img src={V} height={24} />) : (<img src={R} height={24} />)}
+                            {selected.includes(image_data) ? (<img src={V} height={24} alt="Imagem marcada como aprovada"/>) : (<img src={R} height={24} alt="Imagem marcada para reprocessamento"/>)}
                           </div>
 
                           <div className="modal-success-control">
-                            <button className="modal-control" onClick={() => updateSelected(image_data)}><img src={V} height="32" alt="Ícone de verificado" /></button>
-                            <button className="modal-control" onClick={() => updateUnselected(image_data)}><img src={R} height="32" alt="Ícone de refazer" /></button>
+                            <button className="modal-control" onClick={() => updateSelected(image_data)}><img src={V} height="32" alt="Marcar como aprovada" /></button>
+                            <button className="modal-control" onClick={() => updateUnselected(image_data)}><img src={R} height="32" alt="Marcar para reprocessamento" /></button>
                           </div>
 
                         </div>)
@@ -128,8 +154,8 @@ function Gerar(props) {
                     </div> {/*  galeria */}
                   </div>
                   <div className="modal-success-actions">
-                    <button /*onClick={() => confirmarSelecionados() }*/>Confirmar seleção</button>
-                    <button /*onClick={() => reprocessarImagens() }*/>Reprocessar</button>
+                    <button onClick={() => confirmarSelecionados()}>Confirmar seleção</button>
+                    <button onClick={() => reprocessarSelecionados() }>Reprocessar</button>
                   </div>
                 </div> // sucesso
               ) : (
@@ -205,6 +231,7 @@ function Gerar(props) {
           <div className='card-submit'>
             <input className='card-submit-button' type="submit" value="Gerar imagem" onClick={openModal} />
             <p>Créditos restantes: R$50.000</p>
+            <input className='card-submit-button' type="submit" value="Gerar imagem por excel" id="excel"/>
           </div>
 
         </form>

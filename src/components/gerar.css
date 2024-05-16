@@ -152,9 +152,19 @@ label>p {
   font-weight: var(--bold);
 }
 
+.card-submit-button:hover,
+.modal-main button:hover {
+  background-color: #1c1b82;
+}
+
 .card-submit p {
   color: rgba(0 0 0 / .25);
   margin-left: 1em;
+}
+
+#excel {
+  background-color: darkgreen;
+  margin-left: auto;
 }
 
 #descricao {
@@ -224,7 +234,7 @@ label>p {
 }
 
 #modal-close:hover {
-  background-color: rgb(172, 8, 8);
+  outline: solid 1px rgb(172, 8, 8);
 }
 
 #modal-close:hover,
@@ -243,6 +253,7 @@ label>p {
   display: flex;
   flex-direction: column;
   margin: 1em 0;
+  max-width: 20em;
 }
 
 .modal-success-header {
@@ -270,12 +281,24 @@ label>p {
   display: flex;
   justify-content: space-between;
   gap: 1em;
-  margin: 0 1em;
-  /* overflow-x: scroll; */
+  /* margin: 0 1em; */
+  overflow-x: scroll;
+}
+
+.modal-success-gallery::-webkit-scrollbar {
+  background: rgba(200 200 200 / .3);
+  width: thin;
+}
+.modal-success-gallery::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  width: thin;
+  background: rgba(200 200 200 / .7);
+  /* margin: 2px; */
 }
 
 .modal-success-img {
   border-radius: 5px;
+  max-height: 30em;
   box-shadow: var(--shadow);
 }
 
@@ -293,11 +316,11 @@ label>p {
 }
 
 .modal-success-control > button:nth-child(1):hover {
-  background-color: rgb(34 215 34);
+  outline: solid 2px rgb(34 215 34);
 }
 
 .modal-success-control > button:nth-child(2):hover {
-  background-color: #527dc9;
+  outline: solid 2px #527dc9;
 }
 
 .indica-aprovacao {

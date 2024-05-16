@@ -14,7 +14,9 @@ function TabelaUsers() {
   const [users, setUsers] = useState(null);
 
   useEffect(() => {
-    fetch("/usuarios").then((response) => response.json()).then((data) => { setUsers(data) }).catch((error) => console.log(error))
+    fetch("/usuarios")
+    // .then((response) => {console.log(response); return response})
+    .then((response) => response.json()).then((data) => { setUsers(data) }).catch((error) => console.log(error))
   }, []);
 
 
@@ -86,9 +88,9 @@ function TabelaUsers() {
 function TabelaUserPerms() {
   const [userperms, setUserperms] = useState([]);
 
-  useEffect(() => {
-    fetch("/user/gabriel.castelan").then((response) => response.json()).then((data) => { setUserperms(data) }).catch((error) => console.log(error))
-  }, []);
+  // useEffect(() => {
+  //   fetch("/usuarios/gabriel.castelan").then((response) => response.json()).then((data) => { setUserperms(data) }).catch((error) => console.log(error))
+  // }, []);
 
   return (
     <>
