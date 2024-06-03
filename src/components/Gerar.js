@@ -2,7 +2,7 @@ import React from "react";
 
 import { Controller, useForm } from 'react-hook-form';
 import { useState } from "react";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import Modal from 'react-modal';
 import './gerar.css'
 
@@ -12,10 +12,13 @@ import V from '../assets/V.png';
 Modal.setAppElement(document.getElementById('root'));
 
 function Gerar(props) {
-
+  
+  const [responseData, setResponseData] = useState(null);
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = useState([]);
-
+  
+  const afterOpenModal = () => {}
+  
   function openModal() {
     setIsOpen(true);
   }
@@ -27,73 +30,59 @@ function Gerar(props) {
   function updateUnselected(imagem) {
     setSelected(selected.filter((id) => id !== imagem));
   }
-
+  
   function updateSelected(imagem) {
     if (selected.includes(imagem)) {
       return;
     }
 
     setSelected([...selected, imagem]);
-    console.log(imagem.slice(170, 190))
   }
 
-  // const salvarEmBanco = (imagens) => {
-  //   console.log(`Imagens salvas no banco -> ${imagens.map(element => element.substring(170, 190))}`)
-  // }
-
-  const reprocessarSelecionados = () => {
-    const contagem = responseData.imagem.length - selected.length
-    
-    fetch(`/img2img?count=${contagem}`).then((response) => response.json()).then((data) => {
-      console.log(data);
-      setResponseData(data);}
-    )
-    
-    // console.log(contagem)
-  }
+  const [inputFormData, setInputFormData] = useState([]);
 
   const confirmarSelecionados = () => {
-    console.log(selected.map(element => element.substring(170, 190)))
-    // salvarEmBanco(selected);
-    closeModal();
+    console.log(selected.length)
     return;
   }
 
-  const [responseData, setResponseData] = useState(null);
-  const { control, register, handleSubmit, formState: { errors } } = useForm();
-
-  const submitHandler = (data, e) => {
-    e.preventDefault();
-
-    const { marca, colecao, descricao, arquivo } = data
-
-    const formData = new FormData();
-    formData.append('arquivo', arquivo[0]);
-    formData.append('marca', marca);
-    formData.append('colecao', colecao);
-    formData.append('descricao', descricao);
-    // estilista
-    // 
-
-    fetch('/img2img', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => response.json()).then((data) => {
-        console.log(data);
-        setResponseData(data);
-      })
-      .catch((error) => { console.error(error) } ); // erros da api, conexão com ela, resposta dela, etc estarão aqui 
+  async function toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
   };
 
-  useEffect(() => {
-    if (responseData) {
-      setResponseData(responseData)
-    }
-  }, [responseData]); // todo ?
-
-  const afterOpenModal = () => {}
-
+  const { control, register, handleSubmit, formState: { errors } } = useForm();
+  
+  const submitHandler = (data, e) => {
+    e.preventDefault();
+    
+    const { marca, colecao, descricao, arquivo } = data
+    setInputFormData(data);
+  
+    toBase64(arquivo[0]).then(imagemBase64 => {
+      const formData = new FormData();
+      formData.append('arquivo', imagemBase64); // Append base64 string
+      formData.append('marca', marca);
+      formData.append('colecao', colecao);
+      formData.append('descricao', descricao);
+      // console.log(formData)
+    
+      fetch('/img2img', {
+          method: 'POST',
+          body: formData,
+      })
+        .then((response) => response.json()).then((data) => {
+            setResponseData(data);
+          })
+          .catch((error) => { console.error(error) } ); // erros da api, conexão com ela, resposta dela, etc estarão aqui 
+      }
+    )
+  }
+  
   return (
     <div>
       <Modal
@@ -137,7 +126,7 @@ function Gerar(props) {
                         <div key={index} className="modal-success-img-wrapper">
                           <img key={index} alt={`Resultado da geração ${index + 1}`}
                             className="modal-success-img"
-                            src={`data:image/jpeg;base64,${image_data}`} />
+                            src={`${image_data}`} />
 
                           <div className="indica-aprovacao">
                             {selected.includes(image_data) ? (<img src={V} height={24} alt="Imagem marcada como aprovada"/>) : (<img src={R} height={24} alt="Imagem marcada para reprocessamento"/>)}
@@ -155,7 +144,7 @@ function Gerar(props) {
                   </div>
                   <div className="modal-success-actions">
                     <button onClick={() => confirmarSelecionados()}>Confirmar seleção</button>
-                    <button onClick={() => reprocessarSelecionados() }>Reprocessar</button>
+                    {/* <button onClick={() => reprocessarSelecionados() }>Reprocessar</button> */}
                   </div>
                 </div> // sucesso
               ) : (
@@ -236,6 +225,11 @@ function Gerar(props) {
 
         </form>
       </div>
+      {selected.map((image, index) => {
+      <div className="card">
+        <img alt={`Imagem selecionada 1`} src={`data:image/jpeg;base64,${selected[0]}`} />
+      </div>
+      })}
     </div>
   );
 }

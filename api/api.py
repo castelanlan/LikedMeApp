@@ -14,7 +14,7 @@ def read_all_file_contents(directory_path):
         with open(filepath, "r") as file:
             content = file.read()
 
-        file_contents.append(content)
+        file_contents.append(f"data:image/jpeg;base64,{content}")
     return file_contents
 
 bases64 = read_all_file_contents("./imagens")
@@ -94,18 +94,20 @@ def img2img():
     if request.method == "GET":
         return Response(response="Invalid method.", status=500)
     
-    file_data = b64.b64encode(request.files["arquivo"].read()).decode("utf-8")
     r = dict(request.form)
+    # print(r["arquivo"][0:50])
     
     if a := request.args.get("count"):
-        r['imagem'] = [file_data * a]
+        r['imagem'] = [r["arquivo"] * a]
     
     else:
         # print([i[176: 186] for i in bases64])
         r['imagem'] = [
-            file_data,
+            r["arquivo"],
             *bases64
         ]
+
+        # print(r['imagem'][0][0:50])
 
     response = Response(
         response=json.dumps(r),
