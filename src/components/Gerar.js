@@ -40,25 +40,29 @@ function Gerar(props) {
   }
 
   const updateImages = (images) => {
-    // const data = responseData
-    console.log(`=> ${JSON.parse(images.imagem).length}`)
-    // data.imagem = [...selected, ...images.imagem]
-    // setResponseData(data)
+    const data = structuredClone(responseData)
+    console.log(`Update images`)
+    data.imagem = [...selected, ...images.imagem]
+    setResponseData(data);
   }
 
   const [inputFormData, setInputFormData] = useState([]);
   
   const reprocessarSelecionados = () => {
     const remainingDataSet = new Set(responseData.imagem).difference(new Set(selected));
-    console.log(`${responseData.imagem.length} - ${selected.length}`)
     const remainingData = Array.from(remainingDataSet);
     const formData = new FormData();
-
+    
     const { marca, colecao, descricao, } = inputFormData
+    
+    console.log(`Reprocessar selecionados | ${responseData.imagem.length} - ${selected.length} = ${remainingData.length}`)
 
+    if (remainingData.length === 0) {
+      return;
+    }
+    
     formData.append('arquivo', remainingData);
     formData.append('reprocessar', true);
-    console.log(`= ${remainingData.length}`)
     formData.append('count', remainingData.length);
     formData.append('marca', marca);
     formData.append('colecao', colecao);
@@ -69,7 +73,9 @@ function Gerar(props) {
       body: formData 
     })
       .then((response) => response.json()).then((data) => {
-        updateImages(data);
+        // console.log(data);
+        console.log(data.imagem)
+        updateImages(data)
       })
       .catch((error) => {console.log(error)});
   }
@@ -260,9 +266,9 @@ function Gerar(props) {
         </form>
       </div>
       {selected.map((image, index) => {
-      <div className="card">
+      return (<div className="card">
         <img alt={`Imagem selecionada 1`} src={`data:image/jpeg;base64,${selected[0]}`} />
-      </div>
+      </div>)
       })}
     </div>
   );

@@ -91,29 +91,31 @@ users_data = [
 
 @app.route('/img2img', methods=["GET", "POST"])
 def img2img():
+    print("chamado img2img")
     if request.method == "GET":
         return Response(response="Invalid method.", status=500)
     
     # print(type(request.form.get("arquivo")))
     r = dict(request.form)
-    print(r["arquivo"][0:50])
+    # print(r["arquivo"][0:50])
     
-    
-    if (a := int(r.get("count"))) > 1:
-        print(a)
-        print("1")
-        r['imagem'] = [r["arquivo"] * a]
+    with open("b.txt", "w+") as f:
+        f.write(str(r['arquivo']))
+
+    b64_i = iter(str(r["arquivo"]).split(','))    
+
+    if contagem := r.get("count"):
+        print(f"Contagem: {int(contagem)}")
+        r['imagem'] = [c+next(b64_i, '') for c in b64_i]
     
     else:
         # print([i[176: 186] for i in bases64])
-        print("2")
+        print(f"Sem contagem")
         r['imagem'] = [
             r["arquivo"],
             *bases64
         ]
     
-    with open("a.txt", "w+") as f:
-        f.write(str(r['imagem']))
 
     del r["arquivo"]
 
@@ -126,6 +128,8 @@ def img2img():
         mimetype='application/json'
     )
 
+    with open("a.txt", "w+") as f:
+        f.write(str(r))
 
     # sleep(1)
 
