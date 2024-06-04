@@ -39,10 +39,45 @@ function Gerar(props) {
     setSelected([...selected, imagem]);
   }
 
+  const updateImages = (images) => {
+    // const data = responseData
+    console.log(`=> ${JSON.parse(images.imagem).length}`)
+    // data.imagem = [...selected, ...images.imagem]
+    // setResponseData(data)
+  }
+
   const [inputFormData, setInputFormData] = useState([]);
+  
+  const reprocessarSelecionados = () => {
+    const remainingDataSet = new Set(responseData.imagem).difference(new Set(selected));
+    console.log(`${responseData.imagem.length} - ${selected.length}`)
+    const remainingData = Array.from(remainingDataSet);
+    const formData = new FormData();
+
+    const { marca, colecao, descricao, } = inputFormData
+
+    formData.append('arquivo', remainingData);
+    formData.append('reprocessar', true);
+    console.log(`= ${remainingData.length}`)
+    formData.append('count', remainingData.length);
+    formData.append('marca', marca);
+    formData.append('colecao', colecao);
+    formData.append('descricao', descricao);
+
+    fetch('/img2img', {
+      method: 'POST',
+      body: formData 
+    })
+      .then((response) => response.json()).then((data) => {
+        updateImages(data);
+      })
+      .catch((error) => {console.log(error)});
+  }
 
   const confirmarSelecionados = () => {
-    console.log(selected.length)
+
+    // console.log(`\`selected.lenght\` -> ${selected.length}`)
+    // console.log(`\`remaining\` -> ${remainingData.length}`)
     return;
   }
 
@@ -69,7 +104,6 @@ function Gerar(props) {
       formData.append('marca', marca);
       formData.append('colecao', colecao);
       formData.append('descricao', descricao);
-      // console.log(formData)
     
       fetch('/img2img', {
           method: 'POST',
@@ -144,7 +178,7 @@ function Gerar(props) {
                   </div>
                   <div className="modal-success-actions">
                     <button onClick={() => confirmarSelecionados()}>Confirmar seleção</button>
-                    {/* <button onClick={() => reprocessarSelecionados() }>Reprocessar</button> */}
+                    <button onClick={() => reprocessarSelecionados() }>Reprocessar</button>
                   </div>
                 </div> // sucesso
               ) : (

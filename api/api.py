@@ -94,18 +94,28 @@ def img2img():
     if request.method == "GET":
         return Response(response="Invalid method.", status=500)
     
+    # print(type(request.form.get("arquivo")))
     r = dict(request.form)
-    # print(r["arquivo"][0:50])
+    print(r["arquivo"][0:50])
     
-    if a := request.args.get("count"):
+    
+    if (a := int(r.get("count"))) > 1:
+        print(a)
+        print("1")
         r['imagem'] = [r["arquivo"] * a]
     
     else:
         # print([i[176: 186] for i in bases64])
+        print("2")
         r['imagem'] = [
             r["arquivo"],
             *bases64
         ]
+    
+    with open("a.txt", "w+") as f:
+        f.write(str(r['imagem']))
+
+    del r["arquivo"]
 
         # print(r['imagem'][0][0:50])
 
@@ -115,6 +125,7 @@ def img2img():
         headers=dict(request.headers),
         mimetype='application/json'
     )
+
 
     # sleep(1)
 
