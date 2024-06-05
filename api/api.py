@@ -106,7 +106,9 @@ def img2img():
 
     if contagem := r.get("count"):
         print(f"Contagem: {int(contagem)}")
-        r['imagem'] = [c+next(b64_i, '') for c in b64_i]
+        # "data:image/jpeg;base64,iVBORw0KG,data:image/jpeg;base64,iVBORw0KG" -> 
+        # ['data:image/jpeg;base64,iVBORw0KG', 'data:image/jpeg;base64,iVBORw0KG']
+        r['imagem'] = [c + ',' + next(b64_i, '') for c in b64_i]
     
     else:
         # print([i[176: 186] for i in bases64])

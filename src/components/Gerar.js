@@ -41,7 +41,7 @@ function Gerar(props) {
 
   const updateImages = (images) => {
     const data = structuredClone(responseData)
-    console.log(`Update images`)
+    console.log(`Atualizar imagens`)
     data.imagem = [...selected, ...images.imagem]
     setResponseData(data);
   }
@@ -74,7 +74,7 @@ function Gerar(props) {
     })
       .then((response) => response.json()).then((data) => {
         // console.log(data);
-        console.log(data.imagem)
+        // console.log(data.imagem)
         updateImages(data)
       })
       .catch((error) => {console.log(error)});
@@ -266,8 +266,8 @@ function Gerar(props) {
         </form>
       </div>
       {selected.map((image, index) => {
-      return (<div className="card">
-        <img alt={`Imagem selecionada 1`} src={`data:image/jpeg;base64,${selected[0]}`} />
+      return (<div key={index} className="card">
+        <img key={index} alt={`Imagem selecionada ${index}`} src={image} />
       </div>)
       })}
     </div>
