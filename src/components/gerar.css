@@ -6,6 +6,14 @@ main>div {
   align-content: flex-start;
 }
 
+.masonry {
+  margin: 1.5rem 1.5rem;
+}
+
+.masonry > div:nth-child(2) {
+  margin-top: 35rem;
+}
+
 .card {
   --less-shadow: 0 0 4px 1px rgba(0 0 0 / .1);
 
@@ -13,6 +21,21 @@ main>div {
   display: flex;
   flex-direction: column;
   padding: 1.5em 3em 3em 3em;
+  margin: 0;
+}
+
+.card-image {
+  padding: 3em;
+  width: unset;
+}
+
+.card-image > img {
+  max-width: 30em;
+  max-height: 30em;
+  /* height: auto; */
+  /* width: auto; */
+  object-fit: contain;
+  border-radius: 5px;
 }
 
 .card h2 {
@@ -27,7 +50,9 @@ main>div {
 }
 
 .card-gerar {
-  flex-grow: 0;
+  /* flex-grow: 0; */
+  height: 29rem;
+  width: calc(200% - 4.5rem);
 }
 
 .card-form {
@@ -56,7 +81,7 @@ label>p {
 
 .card-select {
   margin-bottom: 1em;
-  padding: .5em 4em .5em .5em;
+  padding: .5em 0 .5em .5em;
   justify-content: left;
   border-radius: .3em;
   border: 1px solid rgba(0 0 0 / .15);
@@ -160,7 +185,18 @@ label>p {
 .card-submit p {
   color: rgba(0 0 0 / .25);
   margin-left: 1em;
+
 }
+
+.card-submit p,
+.card h2,
+#excel,
+.card-select {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 
 #excel {
   background-color: darkgreen;

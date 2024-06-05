@@ -1,3 +1,7 @@
+.cadastros {
+  margin: 1.5rem;
+}
+
 .card-cadastros {
   width: 100%;
 }
@@ -123,6 +127,10 @@ tr:hover {
   display: flex;
   flex-direction: row;
   align-items: baseline;
+}
+
+.card-cadastros-user {
+  margin-top: 1.5rem;
 }
 
 .card-cadastros-user > p {

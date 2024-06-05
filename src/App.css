@@ -1,7 +1,8 @@
 .App {
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  min-height: 100vh;
+  background-image: linear-gradient(135deg, rgba(0, 240, 255, 1) 0%, rgba(0, 87, 255, 1) 100%);
 }
 
 * {
@@ -28,7 +29,6 @@ h1 {
 
 .main {
   flex-grow: 1;
-  background-image: linear-gradient(135deg, rgba(0, 240, 255, 1) 0%, rgba(0, 87, 255, 1) 100%);
 }
 
 .header,
@@ -37,7 +37,7 @@ h1 {
   box-shadow: var(--shadow);
   padding: 1.5em;
   margin: 1.5em;
-  border-radius: 1em;
+  border-radius: .5em;
 
   display: flex;
 }

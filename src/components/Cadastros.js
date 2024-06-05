@@ -105,7 +105,7 @@ function TabelaUserPerms() {
 
 function Cadastros() {
   return (
-    <div>
+    <div className="cadastros">
       <div className="card card-cadastros">
         <div className="cdstro-header">
           <div className="cdstro-usuario">

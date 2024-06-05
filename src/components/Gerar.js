@@ -1,5 +1,6 @@
 import React from "react";
 
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { Controller, useForm } from 'react-hook-form';
 import { useState } from "react";
 // import { useEffect } from "react";
@@ -12,13 +13,13 @@ import V from '../assets/V.png';
 Modal.setAppElement(document.getElementById('root'));
 
 function Gerar(props) {
-  
+
   const [responseData, setResponseData] = useState(null);
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = useState([]);
-  
-  const afterOpenModal = () => {}
-  
+
+  const afterOpenModal = () => { }
+
   function openModal() {
     setIsOpen(true);
   }
@@ -30,7 +31,7 @@ function Gerar(props) {
   function updateUnselected(imagem) {
     setSelected(selected.filter((id) => id !== imagem));
   }
-  
+
   function updateSelected(imagem) {
     if (selected.includes(imagem)) {
       return;
@@ -47,20 +48,20 @@ function Gerar(props) {
   }
 
   const [inputFormData, setInputFormData] = useState([]);
-  
+
   const reprocessarSelecionados = () => {
     const remainingDataSet = new Set(responseData.imagem).difference(new Set(selected));
     const remainingData = Array.from(remainingDataSet);
     const formData = new FormData();
-    
+
     const { marca, colecao, descricao, } = inputFormData
-    
+
     console.log(`Reprocessar selecionados | ${responseData.imagem.length} - ${selected.length} = ${remainingData.length}`)
 
     if (remainingData.length === 0) {
       return;
     }
-    
+
     formData.append('arquivo', remainingData);
     formData.append('reprocessar', true);
     formData.append('count', remainingData.length);
@@ -70,14 +71,14 @@ function Gerar(props) {
 
     fetch('/img2img', {
       method: 'POST',
-      body: formData 
+      body: formData
     })
       .then((response) => response.json()).then((data) => {
         // console.log(data);
         // console.log(data.imagem)
         updateImages(data)
       })
-      .catch((error) => {console.log(error)});
+      .catch((error) => { console.log(error) });
   }
 
   const confirmarSelecionados = () => {
@@ -97,32 +98,32 @@ function Gerar(props) {
   };
 
   const { control, register, handleSubmit, formState: { errors } } = useForm();
-  
+
   const submitHandler = (data, e) => {
     e.preventDefault();
-    
+
     const { marca, colecao, descricao, arquivo } = data
     setInputFormData(data);
-  
+
     toBase64(arquivo[0]).then(imagemBase64 => {
       const formData = new FormData();
       formData.append('arquivo', imagemBase64); // Append base64 string
       formData.append('marca', marca);
       formData.append('colecao', colecao);
       formData.append('descricao', descricao);
-    
+
       fetch('/img2img', {
-          method: 'POST',
-          body: formData,
+        method: 'POST',
+        body: formData,
       })
         .then((response) => response.json()).then((data) => {
-            setResponseData(data);
-          })
-          .catch((error) => { console.error(error) } ); // erros da api, conexão com ela, resposta dela, etc estarão aqui 
-      }
+          setResponseData(data);
+        })
+        .catch((error) => { console.error(error) }); // erros da api, conexão com ela, resposta dela, etc estarão aqui 
+    }
     )
   }
-  
+
   return (
     <div>
       <Modal
@@ -169,7 +170,7 @@ function Gerar(props) {
                             src={`${image_data}`} />
 
                           <div className="indica-aprovacao">
-                            {selected.includes(image_data) ? (<img src={V} height={24} alt="Imagem marcada como aprovada"/>) : (<img src={R} height={24} alt="Imagem marcada para reprocessamento"/>)}
+                            {selected.includes(image_data) ? (<img src={V} height={24} alt="Imagem marcada como aprovada" />) : (<img src={R} height={24} alt="Imagem marcada para reprocessamento" />)}
                           </div>
 
                           <div className="modal-success-control">
@@ -184,7 +185,7 @@ function Gerar(props) {
                   </div>
                   <div className="modal-success-actions">
                     <button onClick={() => confirmarSelecionados()}>Confirmar seleção</button>
-                    <button onClick={() => reprocessarSelecionados() }>Reprocessar</button>
+                    <button onClick={() => reprocessarSelecionados()}>Reprocessar</button>
                   </div>
                 </div> // sucesso
               ) : (
@@ -197,79 +198,83 @@ function Gerar(props) {
           }
         </div>
       </Modal>
-      <div className='card card-gerar'>
-        <h2>Gerar imagem</h2>
-        <form className='card-form' onSubmit={handleSubmit(submitHandler)}>
-          <div className='card-marca-e-colecao'>
+      {/* <ResponsiveMasonry columnsCountBreakPoints={{ 1200: 3, 700: 2, 300: 1 }}> */}
+        <Masonry gutter="1.5rem" className="masonry">
+          <div className='card card-gerar'>
+            <h2>Gerar imagem</h2>
+            <form className='card-form' onSubmit={handleSubmit(submitHandler)}>
+              <div className='card-marca-e-colecao'>
 
-            <div>
-              <label>
-                <p>Marca:</p>
-                <select id="marca" className='card-select' {...register('marca', { required: true })}>
-                  <option value=""></option>
-                  <option value="My Favorite Things">My Favorite Things</option>
-                  <option value="Lança Perfume">Lança Perfume</option>
-                  <option value="Amarante do Brasil">Amarante do Brasil</option>
-                </select>
-              </label>
-            </div>
+                <div>
+                  <label>
+                    <p>Marca:</p>
+                    <select id="marca" className='card-select' {...register('marca', { required: true })}>
+                      <option value=""></option>
+                      <option value="My Favorite Things">My Favorite Things</option>
+                      <option value="Lança Perfume">Lança Perfume</option>
+                      <option value="Amarante do Brasil">Amarante do Brasil</option>
+                    </select>
+                  </label>
+                </div>
 
-            <div>
-              <label id="lbl-colecao">
-                <p>Coleção:</p>
-                <select id="colecao" className='card-select' {...register('colecao', { required: true })}>
-                  <option value=""></option>
-                  <option value="MY24">MY24</option>
-                  <option value="MY23">MY23</option>
-                  <option value="LP24">LP24</option>
-                  <option value="LP23">LP23</option>
-                </select>
-              </label>
-            </div>
+                <div>
+                  <label id="lbl-colecao">
+                    <p>Coleção:</p>
+                    <select id="colecao" className='card-select' {...register('colecao', { required: true })}>
+                      <option value=""></option>
+                      <option value="MY24">MY24</option>
+                      <option value="MY23">MY23</option>
+                      <option value="LP24">LP24</option>
+                      <option value="LP23">LP23</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+
+              <div className='card-descricao'>
+                <label>
+                  <p>Descrição do produto:</p>
+                  <input type='textarea' id='descricao' placeholder='Insira aqui a descrição do produto' {...register('descricao', { required: true })} />
+                </label>
+              </div>
+
+              <div className='card-upload'>
+                <label>
+                  <p>Upload do esboço</p>
+                  <Controller
+                    name="arquivo"
+                    control={control}
+                    defaultValue={"sem-arquivo"}
+                    render={({ field: { value, onChange, ...field } }) => {
+                      return (
+                        <input type='file'
+                          {...field}
+                          value={value?.fileName}
+                          onChange={
+                            event => {
+                              onChange(event.target.files[0])
+                            }}
+                          {...register('arquivo', { required: true, type: 'file' })} />
+                      );
+                    }} />
+                </label>
+              </div>
+
+              <div className='card-submit'>
+                <input className='card-submit-button' type="submit" value="Gerar imagem" onClick={openModal} />
+                <p>Créditos restantes: R$50.000</p>
+                <input className='card-submit-button' type="submit" value="Gerar imagem por excel" id="excel" />
+              </div>
+
+            </form>
           </div>
-
-          <div className='card-descricao'>
-            <label>
-              <p>Descrição do produto:</p>
-              <input type='textarea' id='descricao' placeholder='Insira aqui a descrição do produto' {...register('descricao', { required: true })} />
-            </label>
-          </div>
-
-          <div className='card-upload'>
-            <label>
-              <p>Upload do esboço</p>
-              <Controller
-                name="arquivo"
-                control={control}
-                defaultValue={"sem-arquivo"}
-                render={({ field: { value, onChange, ...field } }) => {
-                  return (
-                    <input type='file'
-                      {...field}
-                      value={value?.fileName}
-                      onChange={
-                        event => {
-                          onChange(event.target.files[0])
-                        }}
-                      {...register('arquivo', { required: true, type: 'file' })} />
-                  );
-                }} />
-            </label>
-          </div>
-
-          <div className='card-submit'>
-            <input className='card-submit-button' type="submit" value="Gerar imagem" onClick={openModal} />
-            <p>Créditos restantes: R$50.000</p>
-            <input className='card-submit-button' type="submit" value="Gerar imagem por excel" id="excel"/>
-          </div>
-
-        </form>
-      </div>
-      {selected.map((image, index) => {
-      return (<div key={index} className="card">
-        <img key={index} alt={`Imagem selecionada ${index}`} src={image} />
-      </div>)
-      })}
+          {selected.map((image, index) => {
+            return (<div key={index} className="card card-image">
+              <img key={index} alt={`Imagem selecionada ${index}`} src={image} />
+            </div>)
+          })}
+        </Masonry>
+      {/* </ResponsiveMasonry> */}
     </div>
   );
 }
