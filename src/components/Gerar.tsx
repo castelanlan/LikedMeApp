@@ -1,22 +1,22 @@
 import React from "react";
 
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
-import { Controller, useForm } from 'react-hook-form';
+import Masonry from "react-responsive-masonry";
+import { Controller, EmptyObject, useForm } from 'react-hook-form';
 import { useState } from "react";
 // import { useEffect } from "react";
 import Modal from 'react-modal';
-import './gerar.css'
+import './gerar.css';
 
 import R from '../assets/R.png';
 import V from '../assets/V.png';
 
 Modal.setAppElement(document.getElementById('root'));
 
-function Gerar(props) {
+function Gerar() {
 
-  const [responseData, setResponseData] = useState(null);
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-  const [selected, setSelected] = useState([]);
+  const [responseData, setResponseData] = useState<SdApiResponse | EmptyObject>({});
+  const [modalIsOpen, setIsOpen] = React.useState<boolean>(false);
+  const [selected, setSelected] = useState<string[]>([]);
 
   const afterOpenModal = () => { }
 
@@ -28,11 +28,11 @@ function Gerar(props) {
     setIsOpen(false);
   }
 
-  function updateUnselected(imagem) {
+  function updateUnselected(imagem: string) {
     setSelected(selected.filter((id) => id !== imagem));
   }
 
-  function updateSelected(imagem) {
+  function updateSelected(imagem: string) {
     if (selected.includes(imagem)) {
       return;
     }
@@ -40,18 +40,19 @@ function Gerar(props) {
     setSelected([...selected, imagem]);
   }
 
-  const updateImages = (images) => {
+  const updateImages = (images: Imagem) => {
     const data = structuredClone(responseData)
     console.log(`Atualizar imagens`)
     data.imagem = [...selected, ...images.imagem]
     setResponseData(data);
   }
 
-  const [inputFormData, setInputFormData] = useState([]);
+  const [inputFormData, setInputFormData] = useState<InputFormData | any>([]); // todo: `any`
 
   const reprocessarSelecionados = () => {
-    const remainingDataSet = new Set(responseData.imagem).difference(new Set(selected));
-    const remainingData = Array.from(remainingDataSet);
+
+    const remainingDataSet: [] = (new Set(responseData.imagem) as any).difference(new Set(selected));
+    const remainingData: string[] | any = Array.from(remainingDataSet);
     const formData = new FormData();
 
     const { marca, colecao, descricao, } = inputFormData
@@ -62,8 +63,8 @@ function Gerar(props) {
       return;
     }
 
-    formData.append('arquivo', remainingData);
-    formData.append('reprocessar', true);
+    formData.append('arquivo', remainingData.toString());
+    formData.append('reprocessar', 'true');
     formData.append('count', remainingData.length);
     formData.append('marca', marca);
     formData.append('colecao', colecao);
@@ -88,7 +89,7 @@ function Gerar(props) {
     return;
   }
 
-  async function toBase64(file) {
+  async function toBase64(file: any): Promise<string | any> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -99,7 +100,7 @@ function Gerar(props) {
 
   const { control, register, handleSubmit, formState: { errors } } = useForm();
 
-  const submitHandler = (data, e) => {
+  const submitHandler = (data: any, e: any) => {
     e.preventDefault();
 
     const { marca, colecao, descricao, arquivo } = data
@@ -117,6 +118,7 @@ function Gerar(props) {
         body: formData,
       })
         .then((response) => response.json()).then((data) => {
+          data["filled"] = true
           setResponseData(data);
         })
         .catch((error) => { console.error(error) }); // erros da api, conexão com ela, resposta dela, etc estarão aqui 
@@ -147,7 +149,7 @@ function Gerar(props) {
             </div>
           ) : (
             <div className="modal-result-wrapper">
-              {responseData ? (
+              {responseData.filled ? (
                 <div className="modal-success">
 
                   <div className="modal-success-header">
@@ -167,7 +169,7 @@ function Gerar(props) {
                         <div key={index} className="modal-success-img-wrapper">
                           <img key={index} alt={`Resultado da geração ${index + 1}`}
                             className="modal-success-img"
-                            src={`${image_data}`} />
+                            src={image_data} />
 
                           <div className="indica-aprovacao">
                             {selected.includes(image_data) ? (<img src={V} height={24} alt="Imagem marcada como aprovada" />) : (<img src={R} height={24} alt="Imagem marcada para reprocessamento" />)}
@@ -250,11 +252,11 @@ function Gerar(props) {
                         <input type='file'
                           {...field}
                           value={value?.fileName}
-                          onChange={
-                            event => {
-                              onChange(event.target.files[0])
-                            }}
-                          {...register('arquivo', { required: true, type: 'file' })} />
+                          // onChange={
+                          //   event => {
+                          //     onChange(event.target.files[0])
+                          //   }}
+                          {...register('arquivo', { required: true })} />
                       );
                     }} />
                 </label>

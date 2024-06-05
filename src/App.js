@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import './App.css';
 
 import Acessos from './components/Acessos';
-import Gerar from './components/Gerar';
+import Gerar from './components/Gerar.tsx';
 import Nav from './components/Nav';
 import AdmImagens from './components/AdmImagens';
 import Cadastros from './components/Cadastros';
