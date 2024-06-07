@@ -65,3 +65,30 @@
   background-color: rgba(13, 224, 255, .15);
   color: #0073C7;
 }
+
+
+@media screen and (max-width: 1300px) {
+  .nav {
+    padding: 2em 0 2em 1em;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .nav-link-section-title,
+  .title,
+  .nav-link-item p {
+    display: none;
+  }
+
+  .nav-link-item {
+    min-width: unset;
+  }
+
+  .nav-link-item:nth-child(1) {
+    margin-top: 0;
+  }
+
+  .nav-link-item-icon {
+    height: 22px;
+  }
+}

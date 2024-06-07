@@ -20,9 +20,9 @@ function NavLinkSectionTitle(props) {
   return (<div className='nav-link-section-title'>{props.children}</div>)
 }
 
-function NavDropDown(props) {
-  return (<div>{props.children} </div>)
-}
+// function NavDropDown(props) {
+//   return (<div>{props.children} </div>)
+// }
 
 function Nav(props) {
   const [active, setActive] = useState('');

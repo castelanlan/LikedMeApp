@@ -86,7 +86,7 @@ function TabelaUsers() {
 }
 
 function TabelaUserPerms() {
-  const [userperms, setUserperms] = useState([]);
+  // const [userperms, setUserperms] = useState([]);
 
   // useEffect(() => {
   //   fetch("/usuarios/gabriel.castelan").then((response) => response.json()).then((data) => { setUserperms(data) }).catch((error) => console.log(error))
@@ -94,11 +94,11 @@ function TabelaUserPerms() {
 
   return (
     <>
-    { userperms && userperms !== 0 ? (
+    {/* { userperms && userperms !== 0 ? (
       <p>Yes {userperms}</p>
     ) : (
       <p>No {userperms}</p>
-    )}
+    )} */}
     </>
   );
 }
