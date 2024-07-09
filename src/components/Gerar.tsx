@@ -78,54 +78,54 @@ function Gerar() {
     setSelected([...selected, imagem]);
   }
 
-  const updateImages = (data_a: any) => {
-    const data = structuredClone(responseData)
-    console.log(`Atualizar imagens`)
-    console.log(data_a)
-    console.log(data_a.imagem)
-    data.imagem = [...selected, ...Object.values(data_a).map(((d: any) => d.result_img))]
-    setResponseData(data);
-  }
+  // const updateImages = (data_a: any) => {
+  //   const data = structuredClone(responseData)
+  //   console.log(`Atualizar imagens`)
+  //   console.log(data_a)
+  //   console.log(data_a.imagem)
+  //   data.imagem = [...selected, ...Object.values(data_a).map(((d: any) => d.result_img))]
+  //   setResponseData(data);
+  // }
 
-  const [inputFormData, setInputFormData] = useState<InputFormData | any>([]); // todo: `any`
+  // const [inputFormData, setInputFormData] = useState<InputFormData | any>([]); // todo: `any`
 
-  const reprocessarSelecionados = () => {
+  // const reprocessarSelecionados = () => {
 
-    const remainingDataSet: [] = (new Set(responseData.imagem) as any).difference(new Set(selected));
-    const remainingData: string[] | any = Array.from(remainingDataSet);
-    const formData = new FormData();
+  //   const remainingDataSet: [] = (new Set(responseData.imagem) as any).difference(new Set(selected));
+  //   const remainingData: string[] | any = Array.from(remainingDataSet);
+  //   const formData = new FormData();
 
-    const { marca, colecao, descricao, } = inputFormData
+  //   const { marca, colecao, descricao, } = inputFormData
 
-    console.log(`Reprocessar selecionados | ${responseData.imagem.length} - ${selected.length} = ${remainingData.length}`)
+  //   console.log(`Reprocessar selecionados | ${responseData.imagem.length} - ${selected.length} = ${remainingData.length}`)
 
-    if (remainingData.length === 0) {
-      return;
-    }
+  //   if (remainingData.length === 0) {
+  //     return;
+  //   }
 
-    formData.append('arquivo', remainingData.toString());
-    formData.append('reprocessar', 'true');
-    formData.append('count', remainingData.length);
-    formData.append('marca', marca);
-    formData.append('colecao', colecao);
-    formData.append('descricao', descricao);
+  //   formData.append('arquivo', remainingData.toString());
+  //   formData.append('reprocessar', 'true');
+  //   formData.append('count', remainingData.length);
+  //   formData.append('marca', marca);
+  //   formData.append('colecao', colecao);
+  //   formData.append('descricao', descricao);
 
-    fetch('http://10.100.35.23:7860/sdapi/v1/img2img', {
-      method: 'POST',
-      body: formData
-    })
-      .then((response) => response.json()).then((data) => {
-        updateImages(data)
-      })
-      .catch((error) => { console.log(error) });
-  }
+  //   fetch('http://10.100.35.23:7860/sdapi/v1/img2img', {
+  //     method: 'POST',
+  //     body: formData
+  //   })
+  //     .then((response) => response.json()).then((data) => {
+  //       updateImages(data)
+  //     })
+  //     .catch((error) => { console.log(error) });
+  // }
 
-  const confirmarSelecionados = () => {
+  // const confirmarSelecionados = () => {
 
-    // console.log(`\`selected.lenght\` -> ${selected.length}`)
-    // console.log(`\`remaining\` -> ${remainingData.length}`)
-    return;
-  }
+  //   // console.log(`\`selected.lenght\` -> ${selected.length}`)
+  //   // console.log(`\`remaining\` -> ${remainingData.length}`)
+  //   return;
+  // }
 
   async function toBase64(file: any): Promise<string | any> {
     return new Promise((resolve, reject) => {
@@ -141,77 +141,73 @@ function Gerar() {
   const submitHandler = (data: any, e: any) => {
     e.preventDefault();
 
-
     const { marca, colecao, descricao, arquivo } = data
-    console.log(marca, colecao)
-    setInputFormData(data);
+    // setInputFormData(data);
 
     toBase64(arquivo[0]).then(imagemBase64 => {
-      // const formData = new FormData();
-      // formData.append('init_images', imagemBase64); // Append base64 string
-      // formData.append('marca', marca);
-      // formData.append('colecao', colecao);
-      // formData.append('descricao', descricao);
-      // formData.append('user', 'eu');
-      // formData.append('contagem', '1');
-
-      // var object: any = {};
-      // formData.forEach(function (value, key) {
-      //   object[key] = value;
-      // });
-      // var json = JSON.stringify(object);
       imagemBase64 = imagemBase64.replace("data:image/jpeg;base64,", "")
+      // Gerando com todos os parâmetros fazia a imagem voltar somente um quadrado sólido sem desenho algum
       var req_json = {
         "prompt": descricao,
-        "negative_prompt": "",
-        "styles": [],
-        "seed": -1,
-        "subseed": -1,
-        "subseed_strength": 0,
-        "seed_resize_from_h": -1,
-        "seed_resize_from_w": -1,
-        "scheduler": "string",
-        "batch_size": 1,
-        "n_iter": 1,
+        // "negative_prompt": "",
+        // "styles": [],
+        // "seed": -1,
+        // "subseed": -1,
+        // "subseed_strength": 0,
+        // "seed_resize_from_h": -1,
+        // "seed_resize_from_w": -1,
+        "sampler_name": "DPM++ 2M",
+        "scheduler": "Karras",
+        // "batch_size": 1,
+        // "n_iter": 1,
         "steps": 50,
         "cfg_scale": 7,
-        "width": 128,
-        "height": 128,
-        "restore_faces": true,
+        "width": 512,
+        "height": 512,
+        // "restore_faces": true,
         "tiling": true,
-        "do_not_save_samples": false,
-        "do_not_save_grid": false,
-        "eta": 0,
+        // "do_not_save_samples": false,
+        // "do_not_save_grid": false,
+        // "eta": 0,
         "denoising_strength": 0.75,
-        "s_min_uncond": 0,
-        "s_churn": 0,
-        "s_tmax": 0,
-        "s_tmin": 0,
-        "s_noise": 0,
-        "override_settings": {},
-        "override_settings_restore_afterwards": true,
-        "refiner_switch_at": 0,
-        "disable_extra_networks": false,
-        "firstpass_image": "",
-        "comments": {},
+        // "s_min_uncond": 0,
+        // "s_churn": 0,
+        // "s_tmax": 0,
+        // "s_tmin": 0,
+        // "s_noise": 0,
+        // "override_settings": {},
+        // "override_settings_restore_afterwards": true,
+        // "refiner_checkpoint": "string",
+        // "refiner_switch_at": 0,
+        // "disable_extra_networks": false,
+        // "firstpass_image": "string",
+        // "comments": {},
         "init_images": [
-          imagemBase64
+            imagemBase64
         ],
-        "inpainting_fill": 0,
-        "inpaint_full_res": true,
-        "inpaint_full_res_padding": 0,
-        "inpainting_mask_invert": 0,
-        "initial_noise_multiplier": 0,
-        "latent_mask": "string",
-        "force_task_id": "string",
-        "include_init_images": false,
-        "script_name": "",
-        "script_args": [],
-        "send_images": true,
-        "save_images": false,
-        "alwayson_scripts": {},
-        "infotext": "string"
-      }
+        // "resize_mode": 0,
+        // "image_cfg_scale": 0,
+        // "mask": "",
+        // "mask_blur_x": 4,
+        // "mask_blur_y": 4,
+        // "mask_blur": 0,
+        // "mask_round": true,
+        // "inpainting_fill": 0,
+        // "inpaint_full_res": true,
+        // "inpaint_full_res_padding": 0,
+        // "inpainting_mask_invert": 0,
+        // "initial_noise_multiplier": 0,
+        // "latent_mask": "",
+        // "force_task_id": "",
+        "sampler_index": "Euler",
+        // "include_init_images": false,
+        // "script_name": "",
+        // "script_args": [],
+        // "send_images": true,
+        // "save_images": false,
+        // "alwayson_scripts": {},
+        // "infotext": "string"
+    }
 
       let bod = JSON.stringify(req_json);
       console.log(bod)
@@ -221,24 +217,22 @@ function Gerar() {
         headers: new Headers({
           'Method': 'POST',
           'Content-Type': 'application/json',
-          // 'Access-Control-Allow-Origin': '*',
-          // 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
           'Accept': 'application/json',
         }),
-        // body: JSON.stringify(formData)
+
         body: bod
       })
         .then((response) => response.json()).then((data) => {
           console.log(data);
           data["filled"] = true;
           data["imagem"] = data["images"].map((item: string) => "data:image/jpeg;base64," + item)
-          data["marca"] = "Ficticia"
-          data["colecao"] = "Ficticia"
-          data["descricao"] = "Ficticia"
+          data["marca"] = marca
+          data["colecao"] = colecao
+          data["descricao"] = descricao
           
           setResponseData(data);
         })
-        .catch((error) => { console.error(error) }); // erros da api, conexão com ela, resposta dela, etc estarão aqui 
+        .catch((error) => { console.error(error) });
     }
     )
   }
@@ -313,8 +307,8 @@ function Gerar() {
                     </div> {/*  galeria */}
                   </div>
                   <div className="modal-success-actions">
-                    <button onClick={() => confirmarSelecionados()}>Confirmar seleção</button>
-                    <button onClick={() => reprocessarSelecionados()}>Reprocessar</button>
+                    {/* <button onClick={() => confirmarSelecionados()}>Confirmar seleção</button> */}
+                    {/* <button onClick={() => reprocessarSelecionados()}>Reprocessar</button> */}
                   </div>
                 </div> // sucesso
               ) : (
@@ -379,10 +373,6 @@ function Gerar() {
                       <input type='file'
                         {...field}
                         value={value?.fileName}
-                        // onChange={
-                        //   event => {
-                        //     onChange(event.target.files[0])
-                        //   }}
                         {...register('arquivo', { required: true })} />
                     );
                   }} />
