@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: app-likedme-front-prod
+ labels:
+    app: app-likedme-front-prod
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: app-likedme-front-prod
+  template:
+    metadata:
+      labels:
+        app: app-likedme-front-prod
+    spec:
+      containers:
+        - name: app-likedme-front-prod
+          image: <CUSTOM_IMAGE_TAG>
+          ports:
+            - containerPort: 3000
+              name: http
+      imagePullSecrets: 
+        - name: registry-gitlab-lamoda-grp-ti
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - app-likedme-front-prod
+              topologyKey: topology.kubernetes.io/zone
+            weight: 100
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - app-likedme-front-prod
+              topologyKey: kubernetes.io/hostname 
+            weight: 99
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-app-likedme-front-prod
+spec:
+  type: ClusterIP
+  selector:
+    app: app-likedme-front-prod
+  ports:
+    - name: http
+      protocol: TCP
+      port: 30010
+      targetPort: http
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-issuer
+  name: in-app-likedme-front-prod
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: app-likedme-front-prod.k8s01.local
+      http:
+        paths:
+          - backend:
+              service:
+                name: svc-app-likedme-front-prod
+                port:
+                  number: 30010
+            path: /
+            pathType: Prefix
+  tls:
+   - hosts:
+     - app-likedme-front-prod.k8s01.local
+     secretName: app-likedme-front-prod-cert

@@ -1,0 +1,80 @@
+## Criado por Diego Piovesan Boschetto
+## Definicao em ordem dos stages do CD/CI geral
+stages:
+  - test
+  - build
+  - deploy
+
+
+####################################################
+### Ambientes de testing                         ###
+####################################################
+## Etapa 01/03 - Test
+.test_testing:
+  stage: test
+  image: node:21-alpine
+  #before_script:
+  #- cp ${ENV_FILE} ./.env.${CI_COMMIT_BRANCH}
+  script:
+    - echo "Rodando testes pre build.."
+    - npm install
+    - npm run build
+    - npm run start
+  environment:
+    name: $CI_COMMIT_BRANCH
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'testing' || $CI_COMMIT_BRANCH == 'production'
+
+## Etapa 02/03 - Build
+build_testing:
+  stage: build
+  #needs:
+  #  - test_testing
+  image: docker:stable
+  tags:
+      - dc2-shared-01
+  services:
+      - docker:stable-dind
+  variables:
+      CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/app-likedme-front-$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA
+      CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE/app-likedme-front-$CI_COMMIT_BRANCH:latest
+  before_script:
+    - docker info
+    - echo "Logando no Container Image Registry..."
+    - docker login --username $CI_REGISTRY_USER --password $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    #- cp ${ENV_FILE} ./.env.${CI_COMMIT_BRANCH}
+  script:
+    - echo "Build imagem Docker..."
+    - docker build --tag $CONTAINER_IMAGE --file .deploy/Dockerfile.$CI_COMMIT_BRANCH .
+    - echo "Enviando imagem Docker..."
+    - docker push $CONTAINER_IMAGE
+    - echo "Retagiando e enviando a imagem Docker (latest)..."
+    - docker tag $CONTAINER_IMAGE $CONTAINER_RELEASE_IMAGE
+    - docker push $CONTAINER_RELEASE_IMAGE
+  environment:
+    name: $CI_COMMIT_BRANCH
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'testing' || $CI_COMMIT_BRANCH == 'production'
+
+## Etapa 03/03 - Deploy
+deploy_testing:
+  stage: deploy
+  needs:
+    - build_testing
+  image: 
+    name: bitnami/kubectl:latest
+    entrypoint: ['']
+  variables:
+      CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/app-likedme-front-$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA
+  script:
+    - kubectl config get-contexts
+    - kubectl config use-context ${KUBERNETES_CONTEXT}
+    - kubectl config set-context --current=true --namespace=${KUBERNETES_NAMESPACE}
+    - kubectl config view
+    - echo "Image tag to apply $CONTAINER_IMAGE"
+    - sed -i -E "s%<CUSTOM_IMAGE_TAG>%$CONTAINER_IMAGE%g" .deploy/deployment-$CI_COMMIT_BRANCH.yaml
+    - kubectl apply -f .deploy/deployment-$CI_COMMIT_BRANCH.yaml
+  environment:
+    name: $CI_COMMIT_BRANCH
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'testing' || $CI_COMMIT_BRANCH == 'production'
