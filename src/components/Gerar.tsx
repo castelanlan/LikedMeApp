@@ -221,6 +221,7 @@ function Gerar() {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Headers': "Origin, X-Requested-With, Content-Type, Accept",
         }),
+        referrerPolicy: "unsafe-url",
 
         body: bod
       })
