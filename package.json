@@ -2,7 +2,7 @@
   "name": "app-liked-me",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://10.100.35.23:7860/sdapi",
+  "proxy": "http://10.100.35.23:7860/",
   "types": "/@types/index.d.ts",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
