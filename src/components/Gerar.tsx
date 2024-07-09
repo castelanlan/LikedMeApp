@@ -3,12 +3,13 @@ import React from "react";
 import Masonry from "react-responsive-masonry";
 import { Controller, useForm } from 'react-hook-form';
 import { useState } from "react";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import Modal from 'react-modal';
 import './gerar.css';
 
 import R from '../assets/R.png';
 import V from '../assets/V.png';
+import loading from '../assets/loading.gif';
 
 Modal.setAppElement(document.getElementById('root'));
 
@@ -17,16 +18,45 @@ function Gerar() {
   const [responseData, setResponseData] = useState<SdApiResponse>({} as SdApiResponse);
   const [modalIsOpen, setIsOpen] = React.useState<boolean>(false);
   const [selected, setSelected] = useState<string[]>([]);
-  const [creditos, setCreditos] = useState<number>(0);
+  // const [creditos, setCreditos] = useState<number>(0);
 
   const afterOpenModal = () => { }
 
-  useEffect(() => {
-    fetch('http://localhost:5000/credits').then((response) => response.json()).then((data) => {
-      console.log(data);
-      setCreditos(data["credits"]);
-    })
-  }, [])
+  // useEffect(() => {
+  //   try {
+  //     fetch('http://localhost:5000/credits').then((response) => response.json()).then((data) => {
+  //       setCreditos(data["credits"]);
+  //     })
+  //   } catch (error) { }
+  // }, [])
+
+  // useEffect(() => {
+  //   try {
+  //     const interval = setInterval(() => {
+  //       fetch('http://localhost:5000/results').then((response) => response.json()).then((data) => {
+  //         // console.log(data)
+  //         // console.log(responseData)
+
+  //         if (data.length < 1) {
+  //           return
+  //         }
+        
+  //         // console.log("passemo")
+  //         // var newResponseData = responseData;
+  //         // var imagens = [...data.map((obj: any) => obj.result_img)];
+  //         updateImages(data)
+  //         // newResponseData["imagem"] = imagens;
+  //         // setResponseData(newResponseData);
+  //       })
+  //     }, 2000)
+  //     return () => clearInterval(interval)
+
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+
+  // }
+  // )
 
   function openModal() {
     setIsOpen(true);
@@ -48,10 +78,12 @@ function Gerar() {
     setSelected([...selected, imagem]);
   }
 
-  const updateImages = (images: Imagem) => {
+  const updateImages = (data_a: any) => {
     const data = structuredClone(responseData)
     console.log(`Atualizar imagens`)
-    data.imagem = [...selected, ...images.imagem]
+    console.log(data_a)
+    console.log(data_a.imagem)
+    data.imagem = [...selected, ...Object.values(data_a).map(((d: any) => d.result_img))]
     setResponseData(data);
   }
 
@@ -78,13 +110,11 @@ function Gerar() {
     formData.append('colecao', colecao);
     formData.append('descricao', descricao);
 
-    fetch('/img2img', {
+    fetch('http://10.100.35.23:7860/sdapi/v1/img2img', {
       method: 'POST',
       body: formData
     })
       .then((response) => response.json()).then((data) => {
-        // console.log(data);
-        // console.log(data.imagem)
         updateImages(data)
       })
       .catch((error) => { console.log(error) });
@@ -113,39 +143,102 @@ function Gerar() {
 
 
     const { marca, colecao, descricao, arquivo } = data
+    console.log(marca, colecao)
     setInputFormData(data);
 
     toBase64(arquivo[0]).then(imagemBase64 => {
-    const formData = new FormData();
-    formData.append('arquivo', imagemBase64); // Append base64 string
-    formData.append('marca', marca);
-    formData.append('colecao', colecao);
-    formData.append('descricao', descricao);
+      // const formData = new FormData();
+      // formData.append('init_images', imagemBase64); // Append base64 string
+      // formData.append('marca', marca);
+      // formData.append('colecao', colecao);
+      // formData.append('descricao', descricao);
+      // formData.append('user', 'eu');
+      // formData.append('contagem', '1');
 
-    var object: any = {};
-    formData.forEach(function (value, key) {
-      object[key] = value;
-    });
-    var json = JSON.stringify(object);
+      // var object: any = {};
+      // formData.forEach(function (value, key) {
+      //   object[key] = value;
+      // });
+      // var json = JSON.stringify(object);
+      imagemBase64 = imagemBase64.replace("data:image/jpeg;base64,", "")
+      var req_json = {
+        "prompt": descricao,
+        "negative_prompt": "",
+        "styles": [],
+        "seed": -1,
+        "subseed": -1,
+        "subseed_strength": 0,
+        "seed_resize_from_h": -1,
+        "seed_resize_from_w": -1,
+        "scheduler": "string",
+        "batch_size": 1,
+        "n_iter": 1,
+        "steps": 50,
+        "cfg_scale": 7,
+        "width": 128,
+        "height": 128,
+        "restore_faces": true,
+        "tiling": true,
+        "do_not_save_samples": false,
+        "do_not_save_grid": false,
+        "eta": 0,
+        "denoising_strength": 0.75,
+        "s_min_uncond": 0,
+        "s_churn": 0,
+        "s_tmax": 0,
+        "s_tmin": 0,
+        "s_noise": 0,
+        "override_settings": {},
+        "override_settings_restore_afterwards": true,
+        "refiner_switch_at": 0,
+        "disable_extra_networks": false,
+        "firstpass_image": "",
+        "comments": {},
+        "init_images": [
+          imagemBase64
+        ],
+        "inpainting_fill": 0,
+        "inpaint_full_res": true,
+        "inpaint_full_res_padding": 0,
+        "inpainting_mask_invert": 0,
+        "initial_noise_multiplier": 0,
+        "latent_mask": "string",
+        "force_task_id": "string",
+        "include_init_images": false,
+        "script_name": "",
+        "script_args": [],
+        "send_images": true,
+        "save_images": false,
+        "alwayson_scripts": {},
+        "infotext": "string"
+      }
 
-    fetch('http://localhost:5000/img2img', {
-      method: 'POST',
-      headers: new Headers({
-        'Method': 'POST',
-        'Content-Type': 'application/json',
-        // 'accept': 'application/json',
-        // 'Access-Control-Allow-Origin': '*',
-        // 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
-      }),
-      // body: JSON.stringify(formData)
-      body: json
-    })
-      .then((response) => response.json()).then((data) => {
-        console.log(data);
-        data["filled"] = true;
-        setResponseData(data);
+      let bod = JSON.stringify(req_json);
+      console.log(bod)
+
+      fetch('/sdapi/v1/img2img', {
+        method: 'POST',
+        headers: new Headers({
+          'Method': 'POST',
+          'Content-Type': 'application/json',
+          // 'Access-Control-Allow-Origin': '*',
+          // 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+          'Accept': 'application/json',
+        }),
+        // body: JSON.stringify(formData)
+        body: bod
       })
-      .catch((error) => { console.error(error) }); // erros da api, conexão com ela, resposta dela, etc estarão aqui 
+        .then((response) => response.json()).then((data) => {
+          console.log(data);
+          data["filled"] = true;
+          data["imagem"] = data["images"].map((item: string) => "data:image/jpeg;base64," + item)
+          data["marca"] = "Ficticia"
+          data["colecao"] = "Ficticia"
+          data["descricao"] = "Ficticia"
+          
+          setResponseData(data);
+        })
+        .catch((error) => { console.error(error) }); // erros da api, conexão com ela, resposta dela, etc estarão aqui 
     }
     )
   }
@@ -188,8 +281,8 @@ function Gerar() {
                     </div>
 
                     <div className="modal-success-gallery">
-                      {responseData.imagem.map((image_data, index) => (
-
+                      {responseData.imagem.length > 0 ? (
+                        responseData.imagem.map((image_data, index) => (
                         <div key={index} className="modal-success-img-wrapper">
                           <img key={index} alt={`Resultado da geração ${index + 1}`}
                             className="modal-success-img"
@@ -204,9 +297,19 @@ function Gerar() {
                             <button className="modal-control" onClick={() => updateUnselected(image_data)}><img src={R} height="32" alt="Marcar para reprocessamento" /></button>
                           </div>
 
-                        </div>)
+                        </div>
+                        )
                       )
-                      }
+                    ) : (
+                      Object.values(responseData.result_ids).map((id, index: number) => (
+                        <div key={index} className="modal-success-img-wrapper">
+                          <img key={index} alt={`Imagem ${id} está carregando`}
+                            className="modal-success-img modal-waiting-img"
+                            src={loading} />
+                        </div>
+                        )
+                      )
+                      )}
                     </div> {/*  galeria */}
                   </div>
                   <div className="modal-success-actions">
@@ -288,7 +391,9 @@ function Gerar() {
 
             <div className='card-submit'>
               <input className='card-submit-button' type="submit" value="Gerar imagem" onClick={openModal} />
-              <p>Créditos restantes: {creditos}</p>
+              {/* <>
+               {creditos ? (<p>Créditos restantes: {creditos}</p>) : (<></>)}
+              </> */}
               <input className='card-submit-button' type="submit" value="Gerar imagem por excel" id="excel" />
             </div>
 

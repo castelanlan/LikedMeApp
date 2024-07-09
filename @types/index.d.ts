@@ -1,4 +1,5 @@
 declare module '*.png';
+declare module '*.gif';
 
 declare module 'react-responsive-masonry';
 
@@ -9,6 +10,7 @@ interface SdApiResponse {
   marca: string[],
   colecao: string[],
   descricao: string[],
+  result_ids: any
   filled: boolean
 }
   
