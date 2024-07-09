@@ -212,12 +212,13 @@ function Gerar() {
       let bod = JSON.stringify(req_json);
       console.log(bod)
 
-      fetch('/sdapi/v1/img2img', {
+      fetch('/api/img2img', {
         method: 'POST',
         headers: new Headers({
           'Method': 'POST',
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         }),
 
         body: bod
