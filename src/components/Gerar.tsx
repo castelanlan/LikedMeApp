@@ -212,21 +212,21 @@ function Gerar() {
       let bod = JSON.stringify(req_json);
       console.log(bod)
 
-      fetch(`${process.env.REACT_APP_BACKEND_URL}/sdapi/v1/img2img`, {
+      fetch(`/sdapi/v1/img2img`, {
         method: 'POST',
         headers: new Headers({
           'Method': 'POST',
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': "Origin, X-Requested-With, Content-Type, Accept",
+          // 'Access-Control-Allow-Origin': '*',
+          // 'Access-Control-Allow-Headers': "Origin, X-Requested-With, Content-Type, Accept",
         }),
         referrerPolicy: "unsafe-url",
 
         body: bod
       })
         .then((response) => response.json()).then((data) => {
-          console.log(data);
+          // console.log(data);
           data["filled"] = true;
           data["imagem"] = data["images"].map((item: string) => "data:image/jpeg;base64," + item)
           data["marca"] = marca
