@@ -18,10 +18,10 @@ function Gerar() {
   const [responseData, setResponseData] = useState<SdApiResponse>({} as SdApiResponse);
   const [modalIsOpen, setIsOpen] = React.useState<boolean>(false);
   const [selected, setSelected] = useState<string[]>([]);
-  // const [creditos, setCreditos] = useState<number>(0);
-
+  
   const afterOpenModal = () => { }
-
+  
+  // const [creditos, setCreditos] = useState<number>(0);
   // useEffect(() => {
   //   try {
   //     fetch('http://localhost:5000/credits').then((response) => response.json()).then((data) => {
@@ -29,34 +29,6 @@ function Gerar() {
   //     })
   //   } catch (error) { }
   // }, [])
-
-  // useEffect(() => {
-  //   try {
-  //     const interval = setInterval(() => {
-  //       fetch('http://localhost:5000/results').then((response) => response.json()).then((data) => {
-  //         // console.log(data)
-  //         // console.log(responseData)
-
-  //         if (data.length < 1) {
-  //           return
-  //         }
-        
-  //         // console.log("passemo")
-  //         // var newResponseData = responseData;
-  //         // var imagens = [...data.map((obj: any) => obj.result_img)];
-  //         updateImages(data)
-  //         // newResponseData["imagem"] = imagens;
-  //         // setResponseData(newResponseData);
-  //       })
-  //     }, 2000)
-  //     return () => clearInterval(interval)
-
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-
-  // }
-  // )
 
   function openModal() {
     setIsOpen(true);
@@ -149,7 +121,7 @@ function Gerar() {
       // Gerando com todos os parâmetros fazia a imagem voltar somente um quadrado sólido sem desenho algum
       var req_json = {
         "prompt": descricao,
-        // "negative_prompt": "",
+        "negative_prompt": "illustration, painting, drawing, art, sketch, deformed, ugly, mutilated, disfigured, text, extra limbs, face cut, head cut, extra fingers, extra arms, poorly drawn face, mutation, bad proportions, cropped head, malformed limbs, mutated hands, fused fingers, long neck, lowres, error, cropped, worst quality, low quality, jpeg artifacts, out of frame, watermark, signature",
         // "styles": [],
         // "seed": -1,
         // "subseed": -1,
@@ -158,18 +130,18 @@ function Gerar() {
         // "seed_resize_from_w": -1,
         "sampler_name": "DPM++ 2M",
         "scheduler": "Karras",
-        // "batch_size": 1,
+        "batch_size": 4,
         // "n_iter": 1,
         "steps": 50,
-        "cfg_scale": 7,
+        "cfg_scale": 12,
         "width": 512,
         "height": 512,
         // "restore_faces": true,
-        "tiling": true,
+        "tiling": false,
         // "do_not_save_samples": false,
         // "do_not_save_grid": false,
         // "eta": 0,
-        "denoising_strength": 0.75,
+        // "denoising_strength": 0.75,
         // "s_min_uncond": 0,
         // "s_churn": 0,
         // "s_tmax": 0,
@@ -200,6 +172,11 @@ function Gerar() {
         // "latent_mask": "",
         // "force_task_id": "",
         "sampler_index": "Euler",
+        "enable_hr": true,
+        "hr_scale": 2,
+        "denoising_strength": 0.7,
+        "hr_second_pass_steps": 10,
+        "hr_upscaler": "R-ESRGAN"
         // "include_init_images": false,
         // "script_name": "",
         // "script_args": [],
@@ -210,7 +187,6 @@ function Gerar() {
     }
 
       let bod = JSON.stringify(req_json);
-      console.log(bod)
 
       fetch(`/sdapi/v1/img2img`, {
         method: 'POST',
@@ -218,26 +194,22 @@ function Gerar() {
           'Method': 'POST',
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          // 'Access-Control-Allow-Origin': '*',
-          // 'Access-Control-Allow-Headers': "Origin, X-Requested-With, Content-Type, Accept",
         }),
         referrerPolicy: "unsafe-url",
 
         body: bod
       })
         .then((response) => response.json()).then((data) => {
-          // console.log(data);
-          data["filled"] = true;
-          data["imagem"] = data["images"].map((item: string) => "data:image/jpeg;base64," + item)
-          data["marca"] = marca
-          data["colecao"] = colecao
-          data["descricao"] = descricao
+          data.filled     = true;
+          data.imagem     = data["images"].map((item: string) => "data:image/jpeg;base64," + item)
+          data.marca      = marca
+          data.colecao    = colecao
+          data.descricao  = descricao
           
           setResponseData(data);
         })
         .catch((error) => { console.error(error) });
-    }
-    )
+    })
   }
 
   return (
