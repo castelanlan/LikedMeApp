@@ -13,14 +13,41 @@ import loading from '../assets/loading.gif';
 
 Modal.setAppElement(document.getElementById('root'));
 
+async function toBase64(file: any): Promise<string | any> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+async function getImageDimensions(file: string[]) {
+  return new Promise(function (resolved, reject) {
+    var i: any = new Image()
+    i.onload = function () {
+      resolved({ w: i.naturalWidth, h: i.naturalHeight })
+    };
+    i.src = file
+    i.onerror = (error: any) => reject(error)
+  })
+}
+
 function Gerar() {
 
   const [responseData, setResponseData] = useState<SdApiResponse>({} as SdApiResponse);
   const [modalIsOpen, setIsOpen] = React.useState<boolean>(false);
   const [selected, setSelected] = useState<string[]>([]);
-  
+  // const [progress, setProgress] = useState<string>("");
+
   const afterOpenModal = () => { }
-  
+
+  // useEffect(() => {
+  //   setInterval(()=>{
+  //     var prog = fetch("/sdapi/v1/progress", )
+  //   }, 3000)
+  // }, [])
+
   // const [creditos, setCreditos] = useState<number>(0);
   // useEffect(() => {
   //   try {
@@ -99,14 +126,6 @@ function Gerar() {
   //   return;
   // }
 
-  async function toBase64(file: any): Promise<string | any> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
 
   const { control, register, handleSubmit, formState: { errors } } = useForm();
 
@@ -114,101 +133,104 @@ function Gerar() {
     e.preventDefault();
 
     const { marca, colecao, descricao, arquivo } = data
+    console.log(arquivo);
     // setInputFormData(data);
 
     toBase64(arquivo[0]).then(imagemBase64 => {
-      imagemBase64 = imagemBase64.replace("data:image/jpeg;base64,", "")
-      // Gerando com todos os parâmetros fazia a imagem voltar somente um quadrado sólido sem desenho algum
-      var req_json = {
-        "prompt": descricao,
-        "negative_prompt": "illustration, painting, drawing, art, sketch, deformed, ugly, mutilated, disfigured, text, extra limbs, face cut, head cut, extra fingers, extra arms, poorly drawn face, mutation, bad proportions, cropped head, malformed limbs, mutated hands, fused fingers, long neck, lowres, error, cropped, worst quality, low quality, jpeg artifacts, out of frame, watermark, signature",
-        // "styles": [],
-        // "seed": -1,
-        // "subseed": -1,
-        // "subseed_strength": 0,
-        // "seed_resize_from_h": -1,
-        // "seed_resize_from_w": -1,
-        "sampler_name": "DPM++ 2M",
-        "scheduler": "Karras",
-        "batch_size": 4,
-        // "n_iter": 1,
-        "steps": 50,
-        "cfg_scale": 12,
-        "width": 512,
-        "height": 512,
-        // "restore_faces": true,
-        "tiling": false,
-        // "do_not_save_samples": false,
-        // "do_not_save_grid": false,
-        // "eta": 0,
-        // "denoising_strength": 0.75,
-        // "s_min_uncond": 0,
-        // "s_churn": 0,
-        // "s_tmax": 0,
-        // "s_tmin": 0,
-        // "s_noise": 0,
-        // "override_settings": {},
-        // "override_settings_restore_afterwards": true,
-        // "refiner_checkpoint": "string",
-        // "refiner_switch_at": 0,
-        // "disable_extra_networks": false,
-        // "firstpass_image": "string",
-        // "comments": {},
-        "init_images": [
+      getImageDimensions(imagemBase64).then((a: any) => {
+        imagemBase64 = imagemBase64.replace("data:image/jpeg;base64,", "")
+        // Gerando com todos os parâmetros fazia a imagem voltar somente um quadrado sólido sem desenho algum
+        var req_json = {
+          "prompt": descricao,
+          "negative_prompt": "illustration, painting, drawing, art, sketch, deformed, ugly, mutilated, disfigured, text, extra limbs, face cut, head cut, extra fingers, extra arms, poorly drawn face, mutation, bad proportions, cropped head, malformed limbs, mutated hands, fused fingers, long neck, lowres, error, cropped, worst quality, low quality, jpeg artifacts, out of frame, watermark, signature",
+          // "styles": [],
+          // "seed": -1,
+          // "subseed": -1,
+          // "subseed_strength": 0,
+          // "seed_resize_from_h": -1,
+          // "seed_resize_from_w": -1,
+          "sampler_name": "DPM++ 2M",
+          "scheduler": "Karras",
+          "batch_size": 4,
+          // "n_iter": 1,
+          "steps": 50,
+          "cfg_scale": 12,
+          "width": a.w,
+          "height": a.h,
+          // "restore_faces": true,
+          "tiling": false,
+          // "do_not_save_samples": false,
+          // "do_not_save_grid": false,
+          // "eta": 0,
+          // "denoising_strength": 0.75,
+          // "s_min_uncond": 0,
+          // "s_churn": 0,
+          // "s_tmax": 0,
+          // "s_tmin": 0,
+          // "s_noise": 0,
+          // "override_settings": {},
+          // "override_settings_restore_afterwards": true,
+          // "refiner_checkpoint": "string",
+          // "refiner_switch_at": 0,
+          // "disable_extra_networks": false,
+          // "firstpass_image": "string",
+          // "comments": {},
+          "init_images": [
             imagemBase64
-        ],
-        // "resize_mode": 0,
-        // "image_cfg_scale": 0,
-        // "mask": "",
-        // "mask_blur_x": 4,
-        // "mask_blur_y": 4,
-        // "mask_blur": 0,
-        // "mask_round": true,
-        // "inpainting_fill": 0,
-        // "inpaint_full_res": true,
-        // "inpaint_full_res_padding": 0,
-        // "inpainting_mask_invert": 0,
-        // "initial_noise_multiplier": 0,
-        // "latent_mask": "",
-        // "force_task_id": "",
-        "sampler_index": "Euler",
-        "enable_hr": true,
-        "hr_scale": 2,
-        "denoising_strength": 0.7,
-        "hr_second_pass_steps": 10,
-        "hr_upscaler": "R-ESRGAN"
-        // "include_init_images": false,
-        // "script_name": "",
-        // "script_args": [],
-        // "send_images": true,
-        // "save_images": false,
-        // "alwayson_scripts": {},
-        // "infotext": "string"
-    }
+          ],
+          // "resize_mode": 0,
+          // "image_cfg_scale": 0,
+          // "mask": "",
+          // "mask_blur_x": 4,
+          // "mask_blur_y": 4,
+          // "mask_blur": 0,
+          // "mask_round": true,
+          // "inpainting_fill": 0,
+          // "inpaint_full_res": true,
+          // "inpaint_full_res_padding": 0,
+          // "inpainting_mask_invert": 0,
+          // "initial_noise_multiplier": 0,
+          // "latent_mask": "",
+          // "force_task_id": "",
+          "sampler_index": "Euler",
+          "enable_hr": true,
+          "hr_scale": 2,
+          "denoising_strength": 0.7,
+          "hr_second_pass_steps": 10,
+          "hr_upscaler": "R-ESRGAN"
+          // "include_init_images": false,
+          // "script_name": "",
+          // "script_args": [],
+          // "send_images": true,
+          // "save_images": false,
+          // "alwayson_scripts": {},
+          // "infotext": "string"
+        }
 
-      let bod = JSON.stringify(req_json);
+        let bod = JSON.stringify(req_json);
 
-      fetch(`/sdapi/v1/img2img`, {
-        method: 'POST',
-        headers: new Headers({
-          'Method': 'POST',
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }),
-        referrerPolicy: "unsafe-url",
+        fetch(`/sdapi/v1/img2img`, {
+          method: 'POST',
+          headers: new Headers({
+            'Method': 'POST',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }),
+          referrerPolicy: "unsafe-url",
 
-        body: bod
-      })
-        .then((response) => response.json()).then((data) => {
-          data.filled     = true;
-          data.imagem     = data["images"].map((item: string) => "data:image/jpeg;base64," + item)
-          data.marca      = marca
-          data.colecao    = colecao
-          data.descricao  = descricao
-          
-          setResponseData(data);
+          body: bod
         })
-        .catch((error) => { console.error(error) });
+          .then((response) => response.json()).then((data) => {
+            data.filled = true;
+            data.imagem = data["images"].map((item: string) => "data:image/jpeg;base64," + item)
+            data.marca = marca
+            data.colecao = colecao
+            data.descricao = descricao
+
+            setResponseData(data);
+          })
+          .catch((error) => { console.error(error) });
+      })
     })
   }
 
@@ -252,32 +274,32 @@ function Gerar() {
                     <div className="modal-success-gallery">
                       {responseData.imagem.length > 0 ? (
                         responseData.imagem.map((image_data, index) => (
-                        <div key={index} className="modal-success-img-wrapper">
-                          <img key={index} alt={`Resultado da geração ${index + 1}`}
-                            className="modal-success-img"
-                            src={image_data} />
+                          <div key={index} className="modal-success-img-wrapper">
+                            <img key={index} alt={`Resultado da geração ${index + 1}`}
+                              className="modal-success-img"
+                              src={image_data} />
 
-                          <div className="indica-aprovacao">
-                            {selected.includes(image_data) ? (<img src={V} height={24} alt="Imagem marcada como aprovada" />) : (<img src={R} height={24} alt="Imagem marcada para reprocessamento" />)}
+                            <div className="indica-aprovacao">
+                              {selected.includes(image_data) ? (<img src={V} height={24} alt="Imagem marcada como aprovada" />) : (<img src={R} height={24} alt="Imagem marcada para reprocessamento" />)}
+                            </div>
+
+                            <div className="modal-success-control">
+                              <button className="modal-control" onClick={() => updateSelected(image_data)}><img src={V} height="32" alt="Marcar como aprovada" /></button>
+                              <button className="modal-control" onClick={() => updateUnselected(image_data)}><img src={R} height="32" alt="Marcar para reprocessamento" /></button>
+                            </div>
+
                           </div>
-
-                          <div className="modal-success-control">
-                            <button className="modal-control" onClick={() => updateSelected(image_data)}><img src={V} height="32" alt="Marcar como aprovada" /></button>
-                            <button className="modal-control" onClick={() => updateUnselected(image_data)}><img src={R} height="32" alt="Marcar para reprocessamento" /></button>
+                        )
+                        )
+                      ) : (
+                        Object.values(responseData.result_ids).map((id, index: number) => (
+                          <div key={index} className="modal-success-img-wrapper">
+                            <img key={index} alt={`Imagem ${id} está carregando`}
+                              className="modal-success-img modal-waiting-img"
+                              src={loading} />
                           </div>
-
-                        </div>
                         )
-                      )
-                    ) : (
-                      Object.values(responseData.result_ids).map((id, index: number) => (
-                        <div key={index} className="modal-success-img-wrapper">
-                          <img key={index} alt={`Imagem ${id} está carregando`}
-                            className="modal-success-img modal-waiting-img"
-                            src={loading} />
-                        </div>
                         )
-                      )
                       )}
                     </div> {/*  galeria */}
                   </div>
