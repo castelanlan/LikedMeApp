@@ -3,7 +3,7 @@ import React from "react";
 import Masonry from "react-responsive-masonry";
 import { Controller, useForm } from 'react-hook-form';
 import { useState } from "react";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import Modal from 'react-modal';
 import './gerar.css';
 
@@ -33,29 +33,46 @@ async function getImageDimensions(file: string[]) {
   })
 }
 
+function WaitingImage({ progressObj }) {
+  const progress = Number(parseFloat(progressObj["progress"]?.toFixed(2))) * 100 || 0;
+  const eta = parseFloat(progressObj["eta_relative"]).toFixed(2) || 0;
+  const currentImage = progressObj["current_image"];
+
+  return (
+    <div className="modal-wait">
+      <h1>Gerando imagem, por favor aguarde</h1>
+      <p>{progress}%</p>
+      <p>{eta}</p>
+      {currentImage && (
+        <img key="parcial_image" alt="Resultado parcial da geração" src={`data:image/jpeg;base64,${currentImage}`} />
+      )}
+    </div>
+  );
+}
+
 function Gerar() {
 
   const [responseData, setResponseData] = useState<SdApiResponse>({} as SdApiResponse);
   const [modalIsOpen, setIsOpen] = React.useState<boolean>(false);
   const [selected, setSelected] = useState<string[]>([]);
-  // const [progress, setProgress] = useState<string>("");
+  const [waitingResponse, setWaitingResponse] = useState<boolean>(false);
+  const [progressObj, setProgressObj] = useState<any>({});
 
   const afterOpenModal = () => { }
 
-  // useEffect(() => {
-  //   setInterval(()=>{
-  //     var prog = fetch("/sdapi/v1/progress", )
-  //   }, 3000)
-  // }, [])
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (!waitingResponse) {
+        return 0
+      }
+      fetch("/sdapi/v1/progress").then(res => res.json()).then(res => {
+        setProgressObj(res)
+      }
+      )
+    }, 3000)
 
-  // const [creditos, setCreditos] = useState<number>(0);
-  // useEffect(() => {
-  //   try {
-  //     fetch('http://localhost:5000/credits').then((response) => response.json()).then((data) => {
-  //       setCreditos(data["credits"]);
-  //     })
-  //   } catch (error) { }
-  // }, [])
+    return () => clearInterval(intervalId)
+  }, [waitingResponse])
 
   function openModal() {
     setIsOpen(true);
@@ -77,56 +94,6 @@ function Gerar() {
     setSelected([...selected, imagem]);
   }
 
-  // const updateImages = (data_a: any) => {
-  //   const data = structuredClone(responseData)
-  //   console.log(`Atualizar imagens`)
-  //   console.log(data_a)
-  //   console.log(data_a.imagem)
-  //   data.imagem = [...selected, ...Object.values(data_a).map(((d: any) => d.result_img))]
-  //   setResponseData(data);
-  // }
-
-  // const [inputFormData, setInputFormData] = useState<InputFormData | any>([]); // todo: `any`
-
-  // const reprocessarSelecionados = () => {
-
-  //   const remainingDataSet: [] = (new Set(responseData.imagem) as any).difference(new Set(selected));
-  //   const remainingData: string[] | any = Array.from(remainingDataSet);
-  //   const formData = new FormData();
-
-  //   const { marca, colecao, descricao, } = inputFormData
-
-  //   console.log(`Reprocessar selecionados | ${responseData.imagem.length} - ${selected.length} = ${remainingData.length}`)
-
-  //   if (remainingData.length === 0) {
-  //     return;
-  //   }
-
-  //   formData.append('arquivo', remainingData.toString());
-  //   formData.append('reprocessar', 'true');
-  //   formData.append('count', remainingData.length);
-  //   formData.append('marca', marca);
-  //   formData.append('colecao', colecao);
-  //   formData.append('descricao', descricao);
-
-  //   fetch('http://10.100.35.23:7860/sdapi/v1/img2img', {
-  //     method: 'POST',
-  //     body: formData
-  //   })
-  //     .then((response) => response.json()).then((data) => {
-  //       updateImages(data)
-  //     })
-  //     .catch((error) => { console.log(error) });
-  // }
-
-  // const confirmarSelecionados = () => {
-
-  //   // console.log(`\`selected.lenght\` -> ${selected.length}`)
-  //   // console.log(`\`remaining\` -> ${remainingData.length}`)
-  //   return;
-  // }
-
-
   const { control, register, handleSubmit, formState: { errors } } = useForm();
 
   const submitHandler = (data: any, e: any) => {
@@ -134,77 +101,32 @@ function Gerar() {
 
     const { marca, colecao, descricao, arquivo } = data
     console.log(arquivo);
-    // setInputFormData(data);
 
     toBase64(arquivo[0]).then(imagemBase64 => {
+      setWaitingResponse(true);
       getImageDimensions(imagemBase64).then((a: any) => {
         imagemBase64 = imagemBase64.replace("data:image/jpeg;base64,", "")
         // Gerando com todos os parâmetros fazia a imagem voltar somente um quadrado sólido sem desenho algum
         var req_json = {
           "prompt": descricao,
           "negative_prompt": "illustration, painting, drawing, art, sketch, deformed, ugly, mutilated, disfigured, text, extra limbs, face cut, head cut, extra fingers, extra arms, poorly drawn face, mutation, bad proportions, cropped head, malformed limbs, mutated hands, fused fingers, long neck, lowres, error, cropped, worst quality, low quality, jpeg artifacts, out of frame, watermark, signature",
-          // "styles": [],
-          // "seed": -1,
-          // "subseed": -1,
-          // "subseed_strength": 0,
-          // "seed_resize_from_h": -1,
-          // "seed_resize_from_w": -1,
           "sampler_name": "DPM++ 2M",
           "scheduler": "Karras",
           "batch_size": 4,
-          // "n_iter": 1,
           "steps": 50,
-          "cfg_scale": 12,
+          "cfg_scale": 15,
           "width": a.w,
           "height": a.h,
-          // "restore_faces": true,
           "tiling": false,
-          // "do_not_save_samples": false,
-          // "do_not_save_grid": false,
-          // "eta": 0,
-          // "denoising_strength": 0.75,
-          // "s_min_uncond": 0,
-          // "s_churn": 0,
-          // "s_tmax": 0,
-          // "s_tmin": 0,
-          // "s_noise": 0,
-          // "override_settings": {},
-          // "override_settings_restore_afterwards": true,
-          // "refiner_checkpoint": "string",
-          // "refiner_switch_at": 0,
-          // "disable_extra_networks": false,
-          // "firstpass_image": "string",
-          // "comments": {},
           "init_images": [
             imagemBase64
           ],
-          // "resize_mode": 0,
-          // "image_cfg_scale": 0,
-          // "mask": "",
-          // "mask_blur_x": 4,
-          // "mask_blur_y": 4,
-          // "mask_blur": 0,
-          // "mask_round": true,
-          // "inpainting_fill": 0,
-          // "inpaint_full_res": true,
-          // "inpaint_full_res_padding": 0,
-          // "inpainting_mask_invert": 0,
-          // "initial_noise_multiplier": 0,
-          // "latent_mask": "",
-          // "force_task_id": "",
           "sampler_index": "Euler",
           "enable_hr": true,
           "hr_scale": 2,
           "denoising_strength": 0.7,
           "hr_second_pass_steps": 10,
           "hr_upscaler": "R-ESRGAN"
-          // "include_init_images": false,
-          // "script_name": "",
-          // "script_args": [],
-          // "send_images": true,
-          // "save_images": false,
-          // "alwayson_scripts": {},
-          // "infotext": "string"
         }
 
         let bod = JSON.stringify(req_json);
@@ -228,6 +150,7 @@ function Gerar() {
             data.descricao = descricao
 
             setResponseData(data);
+            setWaitingResponse(false);
           })
           .catch((error) => { console.error(error) });
       })
@@ -301,6 +224,13 @@ function Gerar() {
                         )
                         )
                       )}
+                      <div>
+                        {waitingResponse === true ? (
+                          <div>
+                            <WaitingImage progressObj={progressObj}/>
+                          </div>
+                        ) : (<></>)}
+                      </div>
                     </div> {/*  galeria */}
                   </div>
                   <div className="modal-success-actions">
@@ -310,7 +240,7 @@ function Gerar() {
                 </div> // sucesso
               ) : (
                 <div className="modal-wait">
-                  <h1>Gerando imagem, por favor aguarde</h1>
+                  <WaitingImage progressObj={progressObj}/>
                 </div>
               )}
             </div> // modal
