@@ -34,19 +34,20 @@ async function getImageDimensions(file: string[]) {
 }
 
 function WaitingImage({ progressObj }) {
-  const progress = Number(parseFloat(progressObj["progress"]?.toFixed(2))) * 100 || 0;
-  const eta = parseFloat(progressObj["eta_relative"]).toFixed(2) || 0;
+  const progress = Number(parseFloat(progressObj["progress"]?.toFixed(2))) * 100;
+  const eta = parseFloat(progressObj["eta_relative"]).toFixed(2);
   const currentImage = progressObj["current_image"];
 
   return (
-    <div className="modal-wait">
+    <>
       <h1>Gerando imagem, por favor aguarde</h1>
-      <p>{progress}%</p>
-      <p>{eta}</p>
-      {currentImage && (
-        <img key="parcial_image" alt="Resultado parcial da geração" src={`data:image/jpeg;base64,${currentImage}`} />
-      )}
+    <div className="modal-wait">
+      {currentImage && (<img className="parcial-image" key="parcial_image" alt="Resultado parcial da geração" src={`data:image/jpeg;base64,${currentImage}`} />)}
+      <p className="progress">{!Number.isNaN(progress) ? (parseInt(progress.toString())) : ('')}<span style={{"fontWeight": "normal"}}>%</span></p>
+      <p className="eta">Sua imagem está quase pronta.</p>
+      <p className="eta">{!Number.isNaN(parseFloat(eta)) ? (eta) : ('')} segundos restantes</p>
     </div>
+    </>
   );
 }
 
@@ -149,6 +150,10 @@ function Gerar() {
             data.colecao = colecao
             data.descricao = descricao
 
+            if (data["error"] | data["errors"]) {
+              console.error(`Erro ${data["error"]}\n${data["errors"]}`)
+            }
+
             setResponseData(data);
             setWaitingResponse(false);
           })
@@ -224,19 +229,12 @@ function Gerar() {
                         )
                         )
                       )}
-                      <div>
-                        {waitingResponse === true ? (
-                          <div>
-                            <WaitingImage progressObj={progressObj}/>
-                          </div>
-                        ) : (<></>)}
-                      </div>
-                    </div> {/*  galeria */}
+                    </div> {/* galeria */}
                   </div>
-                  <div className="modal-success-actions">
+                  {/* <div className="modal-success-actions"> */}
                     {/* <button onClick={() => confirmarSelecionados()}>Confirmar seleção</button> */}
                     {/* <button onClick={() => reprocessarSelecionados()}>Reprocessar</button> */}
-                  </div>
+                  {/* </div> */}
                 </div> // sucesso
               ) : (
                 <div className="modal-wait">
@@ -322,7 +320,6 @@ function Gerar() {
           </div>)
         })}
       </Masonry>
-      {/* </ResponsiveMasonry> */}
     </div>
   );
 }

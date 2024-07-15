@@ -166,6 +166,10 @@ label>p {
   align-items: center;
 }
 
+.modal-main {
+  height: 100%;
+}
+
 .card-submit-button,
 .modal-main button {
   padding: 1.5em 2em;
@@ -275,6 +279,10 @@ label>p {
   outline: solid 1px rgb(172, 8, 8);
 }
 
+.modal-result-wrapper {
+  height: 100%;
+}
+
 #modal-close:hover,
 .modal-result-control > button:hover {
   transform: scale(1.05);
@@ -378,3 +386,19 @@ label>p {
   display: flex;
   gap: 1em;
 }
+
+.modal-wait {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-wait > .progress {
+  font-size: 6em;
+  font-weight: bold;
+  color: rgba(0 0 0 / .35);
+}
+.modal-wait > .eta {}
+.modal-wait > .parcial-image {}
