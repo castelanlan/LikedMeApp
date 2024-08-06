@@ -101,7 +101,7 @@ function Gerar() {
     e.preventDefault();
 
     const { marca, colecao, descricao, arquivo } = data
-    console.log(arquivo);
+    // console.log(arquivo);
 
     toBase64(arquivo[0]).then(imagemBase64 => {
       setWaitingResponse(true);
@@ -115,7 +115,8 @@ function Gerar() {
           "scheduler": "Karras",
           "batch_size": 4,
           "steps": 50,
-          "cfg_scale": 15,
+          "cfg_scale": 7,
+          "denoising_strength": 0.8,
           "width": a.w,
           "height": a.h,
           "tiling": false,
@@ -125,14 +126,13 @@ function Gerar() {
           "sampler_index": "Euler",
           "enable_hr": true,
           "hr_scale": 2,
-          "denoising_strength": 0.7,
-          "hr_second_pass_steps": 10,
-          "hr_upscaler": "R-ESRGAN"
+          "hr_second_pass_steps": 10
         }
 
         let bod = JSON.stringify(req_json);
 
-        fetch(`/sdapi/v1/img2img`, {
+        // fetch(`/sdapi/v1/img2img`, {
+        fetch(`/sdapi/v1/txt2img`, {
           method: 'POST',
           headers: new Headers({
             'Method': 'POST',
